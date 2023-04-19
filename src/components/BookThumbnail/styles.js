@@ -1,27 +1,26 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
+import colors from "../../config/colors";
+import spacing from "../../config/spacing";
 
 const styles = StyleSheet.create({
   book_item: {
     width: 100,
-    margin: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginBottom: spacing.medium,
+    alignItems: "center",
   },
   book_item_image: {
-    margin: 5,
-    width: 100,
-    height: 150,
+    width: 120,
+    height: 175,
+    resizeMode: "cover",
+    backgroundColor: colors.primary,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   book_item_title: {
-    fontSize: 9,
-    paddingTop: 5,
-    textAlign: 'center',
-  },
-  collection_item: {
-    margin: 5,
-    width: 100,
-    height: 150,
-    backgroundColor: '#DEDEDE',
+    fontSize: 14,
+    marginTop: spacing.small,
+    textAlign: "center",
   },
 });
 

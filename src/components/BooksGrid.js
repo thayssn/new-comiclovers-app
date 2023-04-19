@@ -1,44 +1,39 @@
-import React from 'react';
-import {
-  StyleSheet, View, FlatList,
-} from 'react-native';
+import React from "react";
+import { StyleSheet, View, FlatList } from "react-native";
+import { RefreshControl } from "react-native-gesture-handler";
+import spacing from "../config/spacing";
+import BookThumbnail from "./BookThumbnail";
 
-import BookThumbnail from './BookThumbnail';
-
-const styles = StyleSheet.create({
-  book_list_view: {
-    padding: 5,
-    width: '100%',
-    flex: 1,
-  },
-  book_list: {
-    width: '100%',
-    justifyContent: 'flex-start',
-  },
-  book_list_title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    marginLeft: 5,
-  },
-});
-
-const BooksGrid = ({ books }) => (
-  <View style={styles.book_list_view}>
+const BooksGrid = ({ books, isLoading, onRefresh, onClickBook }) => (
+  <View style={styles.container}>
     <FlatList
-      contentContainerStyle={styles.book_list}
+      columnWrapperStyle={styles.grid}
       numColumns={3}
       data={books}
       renderItem={({ item: book }) => (
-        <View style={{ alignItems: 'flex-start', width: '33.33%' }}>
-          <BookThumbnail
-            book={book}
-          />
+        <View style={{ alignItems: "flex-start" }}>
+          <BookThumbnail book={book} onClickBook={() => onClickBook(book)} />
         </View>
       )}
       keyExtractor={(item, index) => index.toString()}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+      }
     />
   </View>
 );
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingVertical: spacing.medium,
+    paddingHorizontal: spacing.medium,
+  },
+  grid: {
+    justifyContent: "space-between",
+    paddingHorizontal: spacing.tiny,
+    paddingTop: spacing.small,
+  },
+});
 
 export default BooksGrid;

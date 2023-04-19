@@ -35,7 +35,7 @@ export default ({ navigation }): any => ({
       size={spacing.large}
       underlayColor="transparent"
       containerStyle={{ paddingRight: spacing.small }}
-      onPress={() => navigation.navigate("Scanner")}
+      onPress={() => navigation.navigate("ScannerScreen")}
     />
   ),
 });

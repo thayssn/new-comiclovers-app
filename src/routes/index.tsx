@@ -5,13 +5,16 @@ import tabScreenOptions from "./tabScreenOptions";
 
 import HomeScreen from "../screens/Home";
 import ScannerScreen from "../screens/Scanner";
-import BookDetailScreen from "../screens/BookDetail";
+import BookDetailScreen from "../components/BookDetail";
 
 import Book from "../types/Book";
+import SectionDetailScreen from "../screens/SectionDetail";
+import Section from "../types/Section";
 
 type StackParamList = {
   HomeScreen: undefined;
   BookDetailScreen: { book: Book };
+  SectionDetailScreen: { section: Section };
 };
 
 const StackNavigator = createNativeStackNavigator<StackParamList>();
@@ -28,6 +31,11 @@ function HomeNavigation() {
         component={BookDetailScreen}
         options={({ route }) => ({ title: route.params.book.title })}
       />
+      <StackNavigator.Screen
+        name="SectionDetailScreen"
+        component={SectionDetailScreen}
+        options={({ route }) => ({ title: route.params.section.title })}
+      />
     </StackNavigator.Navigator>
   );
 }
@@ -43,7 +51,7 @@ export default function TabsNavigation() {
         name="HomeNavigation"
         component={HomeNavigation}
         options={{
-          title: "Comic Lovers ❤️",
+          title: "Comic Lovers",
           tabBarIcon: ({ color, size }) => (
             <Icon name="home" color={color} size={size} />
           ),
@@ -53,7 +61,7 @@ export default function TabsNavigation() {
         name="ScannerScreen"
         component={ScannerScreen}
         options={{
-          title: "Scanner",
+          title: "Escanear",
           tabBarIcon: ({ color, size }) => (
             <Icon name="ios-barcode" type="ionicon" color={color} size={size} />
           ),

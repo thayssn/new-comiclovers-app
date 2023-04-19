@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();
 
-import Routes from "./src/Routes";
+import Routes from "./src/routes";
 import { NavigationContainer } from "@react-navigation/native";
 export default function App() {
   return (
