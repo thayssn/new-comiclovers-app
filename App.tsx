@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();
 
-import Router from "./Router";
+import Routes from "./src/Routes";
 import { NavigationContainer } from "@react-navigation/native";
 export default function App() {
   return (
@@ -12,7 +12,7 @@ export default function App() {
       <StatusBar style="auto" />
       <NavigationContainer>
         <QueryClientProvider client={queryClient}>
-          <Router />
+          <Routes />
         </QueryClientProvider>
       </NavigationContainer>
     </React.Fragment>

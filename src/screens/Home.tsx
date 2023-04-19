@@ -14,7 +14,7 @@ export default function HomeScreen({ navigation }) {
         title="Em destaque"
         books={books}
         onClickBook={(book: Book) =>
-          navigation.navigate("BookDetail", { book })
+          navigation.navigate("BookDetailScreen", { book })
         }
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={refetch} />
