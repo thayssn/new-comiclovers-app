@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { Rating } from "react-native-ratings";
-import Loading from "./Loading";
-import Review from "./Review";
+import Loading from "../components/Loading";
+import Review from "../components/Review";
 import colors from "../config/colors";
 import spacing from "../config/spacing";
 import { useBook } from "../services/booksService";

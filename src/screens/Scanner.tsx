@@ -11,16 +11,6 @@ export default function ScannerScreen({ navigation }) {
 
   const handleBarCodeScanned = ({ data }) => {
     if (scanned) return;
-    Alert.alert("Scanned successfully", JSON.stringify(data), [
-      {
-        text: "Rescan",
-        onPress: () => setScanned(false),
-      },
-      {
-        text: "Cancel",
-        onPress: () => navigation.navigate("Home"),
-      },
-    ]);
     setScanned(true);
   };
 

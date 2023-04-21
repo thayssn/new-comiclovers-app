@@ -1,18 +1,22 @@
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Lottie from "lottie-react-native";
+import colors, { ColorKeys } from "../config/colors";
 const errorAnimationJson = require("../../assets/error.json");
 
-export default function ErrorState({ withBackground = false }) {
+type ErrorStateParams = {
+  backgroundColor?: ColorKeys;
+};
+export default function ErrorState({
+  backgroundColor = "transparent",
+}: ErrorStateParams) {
   return (
     <View
-      style={{
-        flex: 1,
-        flexGrow: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        height: "100%",
-      }}
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors[backgroundColor],
+        },
+      ]}
     >
       <Text
         style={{
@@ -35,3 +39,14 @@ export default function ErrorState({ withBackground = false }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexGrow: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+  },
+});

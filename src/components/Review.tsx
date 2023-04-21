@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet } from "react-native";
 import { Rating } from "react-native-ratings";
-import colors from "../../config/colors";
-import spacing from "../../config/spacing";
-import { BookReview } from "../../types/Book";
+import colors from "../config/colors";
+import spacing from "../config/spacing";
+import { BookReview } from "../types/Book";
 
 export default function Review({ review }: { review: BookReview }) {
   const { user_name, rating, text, created_at } = review;

@@ -1,8 +1,14 @@
 import React from "react";
-import { Image, View, Text, TouchableWithoutFeedback } from "react-native";
+import {
+  Image,
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  StyleSheet,
+} from "react-native";
 import { Icon } from "react-native-elements";
-import colors from "../../config/colors";
-import styles from "./styles";
+import colors from "../config/colors";
+import spacing from "../config/spacing";
 
 export default function BookThumbnail({ book, onClickBook }) {
   const { thumbnail, title, edition } = book;
@@ -33,3 +39,25 @@ export default function BookThumbnail({ book, onClickBook }) {
     </TouchableWithoutFeedback>
   );
 }
+
+const styles = StyleSheet.create({
+  book_item: {
+    width: 100,
+    marginBottom: spacing.medium,
+    alignItems: "center",
+  },
+  book_item_image: {
+    width: 120,
+    height: 175,
+    resizeMode: "cover",
+    backgroundColor: colors.primary,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  book_item_title: {
+    fontSize: 14,
+    marginTop: spacing.small,
+    textAlign: "center",
+  },
+});

@@ -5,7 +5,7 @@ import tabScreenOptions from "./tabScreenOptions";
 
 import HomeScreen from "../screens/Home";
 import ScannerScreen from "../screens/Scanner";
-import BookDetailScreen from "../components/BookDetail";
+import BookDetailScreen from "../screens/BookDetail";
 
 import Book from "../types/Book";
 import SectionDetailScreen from "../screens/SectionDetail";
