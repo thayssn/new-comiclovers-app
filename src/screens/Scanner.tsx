@@ -1,29 +1,70 @@
 import { Camera } from "expo-camera";
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import DialogModal from "../components/DialogModal";
+import { getBookByISBN } from "../services/booksService";
 
 export default function ScannerScreen({ navigation }) {
   const [scanned, setScanned] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [barcodeData, setBarcodeData] = useState(null);
   const [permission, requestPermission] = Camera.useCameraPermissions();
+  useEffect(() => {
+    if (!permission || !permission.granted) requestPermission();
+  }, []);
 
-  if (!permission || !permission.granted) requestPermission();
+  const { data: book, isError } = getBookByISBN(barcodeData);
 
-  const handleBarCodeScanned = ({ data }) => {
-    if (scanned) return;
-    setScanned(true);
+  const openDialog = () => {
+    setShowDialog(true);
   };
 
+  const handleBarCodeScanned = ({ data }) => {
+    setScanned(true);
+    setBarcodeData(data);
+  };
+
+  const handleScanAgain = () => {
+    setScanned(false);
+    setShowDialog(false);
+    setBarcodeData(null);
+  };
+
+  const handleGoToAnotherScreen = () => {
+    navigation.navigate("BookDetailScreen", { book });
+  };
+
+  useEffect(() => {
+    if (scanned && !isError) {
+      openDialog();
+    }
+  }, [scanned, isError, book]);
+
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1 }}>
       <BarCodeScanner
-        onBarCodeScanned={handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
+        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        style={{ flex: 1 }}
       />
+      {scanned && (
+        <DialogModal
+          visible={showDialog}
+          onClose={() => setShowDialog(false)}
+          title={"Código ISBN"}
+          description={`${barcodeData}`}
+          buttons={[
+            { text: "Cancelar", onPress: handleScanAgain, style: "cancel" },
+            {
+              text: "Continuar",
+              onPress: () => handleGoToAnotherScreen(),
+            },
+          ]}
+        />
+      )}
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

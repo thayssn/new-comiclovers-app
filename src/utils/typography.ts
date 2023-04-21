@@ -1,9 +1,9 @@
-export function capitalizeFirstLetter(str) {
+export function capitalizeFirstLetter(str: string): string {
   if (str.length <= 0) return str;
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function capitalizeAllWords(str) {
+export function capitalizeAllWords(str: string): string {
   let words = str.split(" ");
   return words
     .map((word) => {

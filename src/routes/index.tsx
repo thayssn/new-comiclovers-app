@@ -65,6 +65,7 @@ export default function TabsNavigation() {
           tabBarIcon: ({ color, size }) => (
             <Icon name="ios-barcode" type="ionicon" color={color} size={size} />
           ),
+          unmountOnBlur: true,
         }}
       />
     </TabNavigator.Navigator>
