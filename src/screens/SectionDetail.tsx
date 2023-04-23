@@ -6,16 +6,16 @@ import ErrorState from "../components/ErrorState";
 
 export default function SectionDetailScreen({ navigation, route }) {
   const { section } = route.params;
-  const { data: books, isLoading, refetch } = useSection(section.id);
+  const { data, isLoading, refetch } = useSection(section.id);
   if (isLoading) return <Loading />;
-  if (!books) return <ErrorState />;
+  if (!data) return <ErrorState />;
 
   const onClickBook = (book: Book) =>
     navigation.navigate("BookDetailScreen", { book });
 
   return (
     <BooksGrid
-      books={books}
+      books={data.books}
       onClickBook={onClickBook}
       isLoading={isLoading}
       onRefresh={refetch}

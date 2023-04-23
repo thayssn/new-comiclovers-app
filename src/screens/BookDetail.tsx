@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,14 +8,14 @@ import {
   Dimensions,
 } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
-import { Rating } from "react-native-ratings";
-import BookThumbnail from "../components/BookThumbnail";
+import TextButton from "../components/Button";
+import ReviewModal from "../components/CreateReviewModal";
+import ErrorState from "../components/ErrorState";
 import Loading from "../components/Loading";
 import Review from "../components/Review";
 import colors from "../config/colors";
 import spacing from "../config/spacing";
-import { useBookById } from "../services/booksService";
-import { capitalizeFirstLetter } from "../utils/typography";
+import useBookDetails from "./useBookDetails";
 
 const { height: windowHeight } = Dimensions.get("window");
 
@@ -27,71 +27,15 @@ const BookProp = ({ label, value }) => (
 );
 
 const BookDetailScreen = ({ route }) => {
+  const [showRatingModal, setShowRatingModal] = useState(false);
   const { book } = route.params;
-  const { data, isLoading, refetch } = useBookById(book.id);
+  const { data, isLoading, isError, refetch, bookProps } = useBookDetails(book);
+
   if (isLoading) return <Loading />;
+  if (isError) return <ErrorState />;
   if (!data) return null;
-  const {
-    cover,
-    publishing_date,
-    edition,
-    publisher,
-    licensor,
-    description,
-    isbn,
-    title,
-    writers,
-    illustrators,
-    reviews,
-    price,
-    pages,
-    format,
-  } = data;
 
-  const formattedDate = new Intl.DateTimeFormat("pt-BR", {
-    year: "numeric",
-    month: "long",
-  }).format(new Date(publishing_date));
-  const formattedPrice = Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(price);
-  const ratingsSum =
-    reviews.reduce((sum, review) => sum + review.rating, 0) || 0;
-  const rating = ratingsSum / reviews.length || 0;
-
-  const bookProps = [
-    {
-      label: "Avaliação",
-      value: (
-        <View style={styles.ratingBookProps}>
-          <Rating readonly startingValue={rating} imageSize={18} />
-          <Text>{reviews.length ? rating : "Nenhuma"}</Text>
-        </View>
-      ),
-    },
-    { label: "Edição", value: edition },
-    { label: "Preço", value: formattedPrice },
-    { label: "Número de páginas", value: pages },
-    { label: "Formato", value: format },
-    {
-      label: "Data de publicação",
-      value: capitalizeFirstLetter(formattedDate),
-    },
-    { label: "Roteiristas", value: writers.join(", ") },
-    { label: "Ilustradores", value: illustrators.join(", ") },
-    { label: "Editora", value: publisher },
-    { label: "Licenciado por", value: licensor },
-    {
-      label: "ISBN",
-      value: (
-        <View style={styles.isbn}>
-          <Text>{isbn}</Text>
-        </View>
-      ),
-    },
-  ];
-
+  const { cover, description, title, writers, reviews } = data;
   return (
     <ScrollView
       style={styles.container}
@@ -119,8 +63,20 @@ const BookDetailScreen = ({ route }) => {
             <Review review={review} key={index} />
           ))
         ) : (
-          <Text>Nenhuma avaliação</Text>
+          <Text style={styles.emptyReviews}>Nenhuma avaliação</Text>
         )}
+
+        <TextButton
+          text="Avaliar"
+          onPress={() => {
+            setShowRatingModal(true);
+          }}
+        />
+        <ReviewModal
+          onClose={() => setShowRatingModal(false)}
+          visible={showRatingModal}
+          onSubmit={() => setShowRatingModal(false)}
+        />
       </View>
     </ScrollView>
   );
@@ -187,26 +143,22 @@ const styles = StyleSheet.create({
     maxWidth: "50%",
     textAlign: "right",
   },
-  isbn: {
-    fontSize: 14,
-    backgroundColor: colors.lightDark,
-    padding: spacing.tiny,
-    borderRadius: 5,
-  },
   reviewsContainer: {
     padding: 20,
     marginVertical: 20,
+  },
+  emptyReviews: {
+    textAlign: "center",
+    marginBottom: spacing.large,
   },
   reviewsTitle: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: spacing.large,
   },
-  ratingBookProps: {
-    flex: 1,
-    flexDirection: "row",
-    gap: spacing.small,
-    alignItems: "center",
+  ratingButton: {
+    padding: spacing.medium,
+    color: colors.light,
   },
 });
 

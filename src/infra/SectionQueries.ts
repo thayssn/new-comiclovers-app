@@ -5,7 +5,7 @@ export const getSectionsQuery = () => gql`
     sections {
       id
       title
-      books(first: 10) {
+      books(first: 8) {
         cover {
           url
         }

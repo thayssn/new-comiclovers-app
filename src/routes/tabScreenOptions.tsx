@@ -12,20 +12,20 @@ export default ({ navigation }): any => ({
   headerTitleStyle: {
     fontWeight: "bold",
   },
-  headerLeft: (props) => (
-    <Icon
-      {...props}
-      name="menu"
-      color={colors.light}
-      size={spacing.large}
-      containerStyle={{
-        paddingLeft: spacing.small,
-        marginRight: spacing.small,
-      }}
-      underlayColor="transparent"
-      onPress={() => navigation.toggleDrawer()}
-    />
-  ),
+  // headerLeft: (props) => (
+  //   <Icon
+  //     {...props}
+  //     name="menu"
+  //     color={colors.light}
+  //     size={spacing.large}
+  //     containerStyle={{
+  //       paddingLeft: spacing.small,
+  //       marginRight: spacing.small,
+  //     }}
+  //     underlayColor="transparent"
+  //     onPress={() => navigation.toggleDrawer()}
+  //   />
+  // ),
   headerRight: (props) => (
     <Icon
       {...props}

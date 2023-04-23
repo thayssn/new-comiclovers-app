@@ -6,15 +6,17 @@ import { useBooksSearch } from "../services/booksService";
 import { useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { Button } from "react-native-elements";
 import spacing from "../config/spacing";
 import colors from "../config/colors";
 import { Keyboard } from "react-native";
+import EmptyState from "../components/EmptyState";
+import TextButton from "../components/Button";
 
 export default function BookSearchScreen({ navigation }) {
   const [searchText, setSearchText] = useState("");
-  const { data, isLoading, isError, refetch } = useBooksSearch(searchText);
-  const books = data || [];
+  const { data, isLoading, isError, refetch, isFetched } =
+    useBooksSearch(searchText);
+  const books = data || null;
 
   const onClickBook = (book: Book) =>
     navigation.navigate("BookDetailScreen", { book });
@@ -37,19 +39,22 @@ export default function BookSearchScreen({ navigation }) {
           onChangeText={setSearchText}
           style={styles.input}
         />
-        <Button title="Buscar" onPress={handleSearch} />
+        <TextButton text="Buscar" onPress={handleSearch} />
       </View>
       {isLoading ? (
         <Loading />
       ) : (
-        data && (
+        data &&
+        (data.length ? (
           <BooksGrid
             books={books}
             onClickBook={onClickBook}
             isLoading={isLoading}
             onRefresh={refetch}
           />
-        )
+        ) : (
+          <EmptyState />
+        ))
       )}
       {isError && <ErrorState />}
     </KeyboardAvoidingView>

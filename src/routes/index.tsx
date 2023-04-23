@@ -10,7 +10,8 @@ import BookDetailScreen from "../screens/BookDetail";
 import Book from "../types/Book";
 import SectionDetailScreen from "../screens/SectionDetail";
 import Section from "../types/Section";
-import BookSearchScreen from "../screens/BookSearchScreen";
+import BookSearchScreen from "../screens/BookSearch";
+import CollectionsScreen from "../screens/Collections";
 
 type StackParamList = {
   HomeScreen: undefined;
@@ -62,6 +63,17 @@ export default function TabsNavigation() {
           tabBarIcon: ({ color, size }) => (
             <Icon name="home" color={color} size={size} />
           ),
+        }}
+      />
+      <TabNavigator.Screen
+        name="CollectionsScreen"
+        component={CollectionsScreen}
+        options={{
+          title: "Minhas coleções",
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="archive" type="octicon" color={color} size={size} />
+          ),
+          unmountOnBlur: true,
         }}
       />
       <TabNavigator.Screen

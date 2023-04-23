@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import Lottie from "lottie-react-native";
 import colors, { ColorKeys } from "../config/colors";
-import errorAnimationJson from "../../assets/error.json";
+import emptyAnimationJson from "../../assets/empty.json";
 
 type ErrorStateParams = {
   backgroundColor?: ColorKeys;
 };
-export default function ErrorState({
+export default function EmptyState({
   backgroundColor = "transparent",
 }: ErrorStateParams) {
   return (
@@ -28,7 +28,7 @@ export default function ErrorState({
       </Text>
       <Text>Não encontramos nada por aqui!</Text>
       <Lottie
-        source={errorAnimationJson}
+        source={emptyAnimationJson}
         autoPlay
         loop
         style={{

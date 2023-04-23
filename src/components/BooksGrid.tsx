@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.medium,
   },
   grid: {
-    justifyContent: "space-between",
+    columnGap: spacing.large,
+    gap: spacing.medium,
     paddingHorizontal: spacing.tiny,
     paddingTop: spacing.small,
   },

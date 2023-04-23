@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import Lottie from "lottie-react-native";
 import CLGradient from "./CLGradient";
-const loadingAnimationJson = require("../../assets/loading.json");
+import loadingAnimationJson from "../../assets/loading.json";
 
 export default function Loading({ withBackground = false }) {
   return (
