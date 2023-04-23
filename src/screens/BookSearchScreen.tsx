@@ -20,17 +20,17 @@ export default function BookSearchScreen({ navigation }) {
     navigation.navigate("BookDetailScreen", { book });
 
   const handleSearch = () => {
-    if (!searchText) return;
+    if (!searchText || searchText.length < 3) return;
     Keyboard.dismiss();
     refetch();
   };
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : null}
     >
-      <View style={styles.container}>
+      <View style={styles.searchContainer}>
         <TextInput
           placeholder="Digite um título para buscar"
           value={searchText}
@@ -38,20 +38,20 @@ export default function BookSearchScreen({ navigation }) {
           style={styles.input}
         />
         <Button title="Buscar" onPress={handleSearch} />
-        {isLoading ? (
-          <Loading />
-        ) : (
-          data && (
-            <BooksGrid
-              books={books}
-              onClickBook={onClickBook}
-              isLoading={isLoading}
-              onRefresh={refetch}
-            />
-          )
-        )}
-        {isError && <ErrorState />}
       </View>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        data && (
+          <BooksGrid
+            books={books}
+            onClickBook={onClickBook}
+            isLoading={isLoading}
+            onRefresh={refetch}
+          />
+        )
+      )}
+      {isError && <ErrorState />}
     </KeyboardAvoidingView>
   );
 }
@@ -59,8 +59,10 @@ export default function BookSearchScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: spacing.medium,
     backgroundColor: colors.light,
+  },
+  searchContainer: {
+    padding: spacing.medium,
   },
   input: {
     padding: spacing.small,

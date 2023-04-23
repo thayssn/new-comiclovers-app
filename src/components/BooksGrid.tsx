@@ -13,6 +13,7 @@ export default function BooksGrid({
   return (
     <View style={styles.container}>
       <FlatList
+        showsVerticalScrollIndicator={false}
         columnWrapperStyle={styles.grid}
         numColumns={3}
         data={books}
