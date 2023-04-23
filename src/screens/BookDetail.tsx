@@ -6,7 +6,6 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
-  Animated,
 } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { Rating } from "react-native-ratings";
@@ -70,8 +69,8 @@ const BookDetailScreen = ({ route }) => {
         </View>
       ),
     },
-    { label: "Preço", value: formattedPrice },
     { label: "Edição", value: edition },
+    { label: "Preço", value: formattedPrice },
     { label: "Número de páginas", value: pages },
     { label: "Formato", value: format },
     {
@@ -82,7 +81,14 @@ const BookDetailScreen = ({ route }) => {
     { label: "Ilustradores", value: illustrators.join(", ") },
     { label: "Editora", value: publisher },
     { label: "Licenciado por", value: licensor },
-    { label: "ISBN", value: isbn },
+    {
+      label: "ISBN",
+      value: (
+        <View style={styles.isbn}>
+          <Text>{isbn}</Text>
+        </View>
+      ),
+    },
   ];
 
   return (
@@ -178,11 +184,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 10,
     maxWidth: "50%",
+    textAlign: "right",
   },
   isbn: {
     fontSize: 14,
     backgroundColor: colors.lightDark,
-    padding: 5,
+    padding: spacing.tiny,
     borderRadius: 5,
   },
   reviewsContainer: {
