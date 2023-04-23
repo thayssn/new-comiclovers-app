@@ -6,11 +6,9 @@ import ErrorState from "../components/ErrorState";
 
 export default function SectionDetailScreen({ navigation, route }) {
   const { section } = route.params;
-  const { data, isLoading, refetch } = useSection(section.id);
+  const { data: books, isLoading, refetch } = useSection(section.id);
   if (isLoading) return <Loading />;
-  if (!data) return <ErrorState />;
-
-  const { books } = data;
+  if (!books) return <ErrorState />;
 
   const onClickBook = (book: Book) =>
     navigation.navigate("BookDetailScreen", { book });

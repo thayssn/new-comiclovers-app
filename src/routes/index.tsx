@@ -10,9 +10,11 @@ import BookDetailScreen from "../screens/BookDetail";
 import Book from "../types/Book";
 import SectionDetailScreen from "../screens/SectionDetail";
 import Section from "../types/Section";
+import BookSearchScreen from "../screens/BookSearchScreen";
 
 type StackParamList = {
   HomeScreen: undefined;
+  BookSearchScreen: undefined;
   BookDetailScreen: { book: Book };
   SectionDetailScreen: { section: Section };
 };
@@ -35,6 +37,11 @@ function HomeNavigation() {
         name="SectionDetailScreen"
         component={SectionDetailScreen}
         options={({ route }) => ({ title: route.params.section.title })}
+      />
+      <StackNavigator.Screen
+        name="BookSearchScreen"
+        component={BookSearchScreen}
+        options={{ title: "Busca" }}
       />
     </StackNavigator.Navigator>
   );

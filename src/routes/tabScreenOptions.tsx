@@ -29,13 +29,13 @@ export default ({ navigation }): any => ({
   headerRight: (props) => (
     <Icon
       {...props}
-      name="ios-barcode"
+      name="ios-search"
       type="ionicon"
       color={colors.light}
-      size={spacing.large}
+      size={24}
       underlayColor="transparent"
       containerStyle={{ paddingRight: spacing.small }}
-      onPress={() => navigation.navigate("ScannerScreen")}
+      onPress={() => navigation.navigate("BookSearchScreen")}
     />
   ),
 });

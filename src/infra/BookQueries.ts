@@ -1,6 +1,15 @@
 import { gql } from "graphql-request";
 
-const fields = `
+const basicFields = `
+cover {
+  url
+}
+id
+title
+edition
+`;
+
+const completeFields = `
 cover {
   url
 }
@@ -29,7 +38,7 @@ reviews {
 export const getBookByIdQuery = (id: string) => gql`
   query BookById {
     book(where: { id: "${id}" }) {
-      ${fields}
+      ${completeFields}
     }
   }
 `;
@@ -37,7 +46,15 @@ export const getBookByIdQuery = (id: string) => gql`
 export const getBookByISBN = (isbn: string) => gql`
   query BookById {
     book(where: { isbn: "${isbn}" }) {
-      ${fields}
+      ${completeFields}
+    }
+  }
+`;
+
+export const getBooksByTitle = (title: string) => gql`
+  query BooksSearch {
+    books(where: { title_contains: "${title}" }) {
+      ${basicFields}
     }
   }
 `;

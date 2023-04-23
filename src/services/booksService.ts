@@ -1,7 +1,7 @@
 import { gqlClient } from "../infra/gqlClient";
-import { BookDetails } from "../types/Book";
+import Book, { BookDetails } from "../types/Book";
 import { useQuery } from "react-query";
-import { getBookByIdQuery } from "../infra/BookQueries";
+import { getBookByIdQuery, getBooksByTitle } from "../infra/BookQueries";
 
 const fetchBookById = async (bookId: string): Promise<BookDetails> => {
   if (!bookId) return;
@@ -19,8 +19,23 @@ const fetchBookByISBN = async (isbn: string): Promise<BookDetails> => {
   return book;
 };
 
+const fetchBooksByTitle = async (title: string): Promise<Book[]> => {
+  if (!title) return;
+  const { books } = await gqlClient.request<{ books: Book[] }>(
+    getBooksByTitle(title)
+  );
+  return books;
+};
+
 export const useBookById = (bookId: string) =>
   useQuery(["books", bookId], () => fetchBookById(bookId));
 
 export const useBookByISBN = (isbn: string) =>
-  useQuery(["books", "isbn", isbn], () => fetchBookByISBN(isbn));
+  useQuery(["books", "isbn", isbn], () => fetchBookByISBN(isbn), {
+    enabled: false,
+  });
+
+export const useBooksSearch = (title: string) =>
+  useQuery(["books", "search"], () => fetchBooksByTitle(title), {
+    enabled: false,
+  });
