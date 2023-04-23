@@ -9,16 +9,17 @@ import {
 import { Icon } from "react-native-elements";
 import colors from "../config/colors";
 import spacing from "../config/spacing";
+import Book from "../types/Book";
 
 export default function BookThumbnail({ book, onClickBook }) {
-  const { thumbnail, title, edition } = book;
+  const { cover, title, edition }: Book = book;
   return (
     <TouchableWithoutFeedback onPress={onClickBook}>
       <View style={styles.book_item}>
-        {thumbnail ? (
+        {cover.url ? (
           <Image
             source={{
-              uri: `${thumbnail}`,
+              uri: `${cover.url}`,
             }}
             style={styles.book_item_image}
           />

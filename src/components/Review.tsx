@@ -5,19 +5,25 @@ import spacing from "../config/spacing";
 import { BookReview } from "../types/Book";
 
 export default function Review({ review }: { review: BookReview }) {
-  const { user_name, rating, text, created_at } = review;
+  const { user_name, rating, text, published_at } = review;
+  console.log("🔥🔥🔥", published_at);
   const formattedDate = new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-  }).format(new Date(created_at));
+  }).format(new Date(published_at ?? ""));
 
   return (
     <View style={styles.reviewContainer}>
       <Text style={styles.userName}>{user_name}</Text>
       <Text style={styles.date}>{formattedDate}</Text>
+      <Rating
+        startingValue={rating}
+        readonly
+        imageSize={24}
+        style={styles.rating}
+      />
       <Text style={styles.text}>{text}</Text>
-      <Rating startingValue={rating} readonly imageSize={24} />
     </View>
   );
 }
@@ -43,7 +49,10 @@ const styles = StyleSheet.create({
   date: {
     textAlign: "center",
     fontSize: 12,
-    marginBottom: spacing.medium,
+    marginBottom: spacing.small,
     color: colors.dark,
+  },
+  rating: {
+    marginBottom: spacing.small,
   },
 });

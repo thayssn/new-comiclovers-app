@@ -1,8 +1,9 @@
 import Book from "./Book";
 
 type Section = {
-  slug: string;
+  id: string;
   title: string;
+  description: string;
   books: Book[];
 };
 

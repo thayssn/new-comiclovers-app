@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useEffect, useState } from "react";
 import DialogModal from "../components/DialogModal";
-import { getBookByISBN } from "../services/booksService";
+import { useBookByISBN } from "../services/booksService";
 
 export default function ScannerScreen({ navigation }) {
   const [scanned, setScanned] = useState(false);
@@ -14,7 +14,7 @@ export default function ScannerScreen({ navigation }) {
     if (!permission || !permission.granted) requestPermission();
   }, []);
 
-  const { data: book, isError } = getBookByISBN(barcodeData);
+  const { data: book, isFetching } = useBookByISBN(barcodeData);
 
   const openDialog = () => {
     setShowDialog(true);
@@ -36,10 +36,10 @@ export default function ScannerScreen({ navigation }) {
   };
 
   useEffect(() => {
-    if (scanned && !isError) {
+    if (scanned && !isFetching) {
       openDialog();
     }
-  }, [scanned, isError, book]);
+  }, [scanned, isFetching, book]);
 
   return (
     <View style={{ flex: 1 }}>

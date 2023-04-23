@@ -1,10 +1,10 @@
-import PublishingStatus from "../enums/PublishingStatus";
-
 type Book = {
+  id: string;
   title: string;
   edition: string;
-  thumbnail: string;
-  id: string;
+  cover?: {
+    url: string;
+  };
 };
 
 export type BookReview = {
@@ -12,20 +12,22 @@ export type BookReview = {
   user_name: string;
   text: string;
   rating: number;
-  created_at: number;
+  published_at: number;
 };
 
 export type BookDetails = Book & {
-  publisher: string;
-  publishing_date: string;
-  licensor: string;
-  description: string;
-  writers: [];
-  status: PublishingStatus;
-  reviews: BookReview[];
-  price: number;
-  pages: number;
-  isbn: string;
+  isbn?: string;
+  publisher?: string;
+  publishing_date?: string;
+  licensor?: string;
+  description?: string;
+  reviews?: BookReview[];
+  price?: number;
+  pages?: number;
+  format?: string;
+  writers: string[];
+  illustrators?: string[];
+  public_collections?: string[];
 };
 
 export default Book;

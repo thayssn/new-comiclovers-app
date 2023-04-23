@@ -1,15 +1,13 @@
 /* eslint-disable camelcase */
-import React from 'react';
-import {
-  View, StyleSheet, Text, Image,
-} from 'react-native';
-import { Icon } from 'react-native-elements';
-import { SafeAreaView } from 'react-navigation';
-import CLGradient from '../CLGradient';
-import { BASE_URL } from '../../config/env_config';
+import React from "react";
+import { View, StyleSheet, Text, Image } from "react-native";
+import { Icon } from "react-native-elements";
+import { SafeAreaView } from "react-navigation";
+import CLGradient from "../CLGradient";
+import { BASE_URL } from "../../config/env_config";
 
-import { onSignOut, getUserToken } from '../../services/auth';
-import api from '../../services/api';
+import { onSignOut, getUserToken } from "../../services/auth";
+import api from "../../services/api";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,20 +16,20 @@ const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     flexGrow: 1,
-    alignContent: 'space-between',
-    justifyContent: 'space-between',
+    alignContent: "space-between",
+    justifyContent: "space-between",
   },
   routes: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: "400",
     padding: 10,
-    color: '#FFF',
+    color: "#FFF",
   },
   separator: {
     marginVertical: 20,
     height: 1,
-    width: '100%',
-    backgroundColor: '#DDD',
+    width: "100%",
+    backgroundColor: "#DDD",
   },
   navigation: {
     flex: 1,
@@ -43,37 +41,40 @@ const styles = StyleSheet.create({
   },
   logout: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: "400",
     paddingHorizontal: 10,
-    color: '#FFF',
+    color: "#FFF",
   },
   itemWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 10,
   },
   inactive: {
     opacity: 0.3,
   },
   itemUser: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
 });
 
 class Menu extends React.Component {
   state = {
-    profile_picture: 'https://i7.pngguru.com/preview/163/442/427/computer-icons-user-profile-icon-design-avatar.jpg',
-    name: 'username',
-  }
+    profile_picture:
+      "https://i7.pngguru.com/preview/163/442/427/computer-icons-user-profile-icon-design-avatar.jpg",
+    name: "username",
+  };
 
   async componentDidMount() {
     try {
       const userToken = await getUserToken();
 
       // eslint-disable-next-line camelcase
-      const { data: { profile_picture, name } } = await api.get('/me', {
+      const {
+        data: { profile_picture, name },
+      } = await api.get("/me", {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
@@ -84,7 +85,8 @@ class Menu extends React.Component {
 
       this.setState({
         // eslint-disable-next-line camelcase
-        profile_picture: `${BASE_URL}/${profile_picture}` || defaultImg, name,
+        profile_picture: `${BASE_URL}/${profile_picture}` || defaultImg,
+        name,
       });
     } catch (err) {
       console.log(err);
@@ -100,7 +102,10 @@ class Menu extends React.Component {
     return (
       <View style={styles.container}>
         <CLGradient />
-        <SafeAreaView style={styles.innerContainer} forceInset={{ top: 'always', horizontal: 'never' }}>
+        <SafeAreaView
+          style={styles.innerContainer}
+          forceInset={{ top: "always", horizontal: "never" }}
+        >
           <View style={styles.navigation}>
             {/* { routes.map(({ routeName }) => (
               <Text
@@ -112,18 +117,25 @@ class Menu extends React.Component {
               </Text>
             ))} */}
             <View style={styles.itemUser}>
-              <View style={{
-                backgroundColor: '#dedede', width: 128, height: 128, borderRadius: 128, overflow: 'hidden', marginBottom: 20,
-              }}
+              <View
+                style={{
+                  backgroundColor: "#dedede",
+                  width: 128,
+                  height: 128,
+                  borderRadius: 128,
+                  overflow: "hidden",
+                  marginBottom: 20,
+                }}
               >
                 <Image
                   style={{
-                    width: 128, height: 128,
+                    width: 128,
+                    height: 128,
                   }}
                   source={{ uri: profile_picture }}
                 />
               </View>
-              <Text style={{ color: 'white', fontSize: 20 }}>{name}</Text>
+              <Text style={{ color: "white", fontSize: 20 }}>{name}</Text>
             </View>
             <View style={styles.separator} />
             <View style={styles.itemWrapper}>
@@ -136,9 +148,11 @@ class Menu extends React.Component {
               />
               <Text
                 style={styles.routes}
-                onPress={() => { navigate('Profile'); }}
+                onPress={() => {
+                  navigate("Profile");
+                }}
               >
-              Perfil
+                Perfil
               </Text>
             </View>
             <View style={styles.itemWrapper}>
@@ -151,9 +165,11 @@ class Menu extends React.Component {
               />
               <Text
                 style={styles.routes}
-                onPress={() => { navigate('Main'); }}
+                onPress={() => {
+                  navigate("Main");
+                }}
               >
-              Navegar
+                Navegar
               </Text>
             </View>
             <View style={styles.itemWrapper}>
@@ -166,9 +182,11 @@ class Menu extends React.Component {
               />
               <Text
                 style={styles.routes}
-                onPress={() => { navigate('MyCollections'); }}
+                onPress={() => {
+                  navigate("MyCollections");
+                }}
               >
-              Minhas coleções
+                Minhas coleções
               </Text>
             </View>
             <View style={styles.itemWrapper}>
@@ -181,9 +199,11 @@ class Menu extends React.Component {
               />
               <Text
                 style={styles.routes}
-                onPress={() => { navigate('MyFavorites'); }}
+                onPress={() => {
+                  navigate("MyFavorites");
+                }}
               >
-              Meus favoritos
+                Meus favoritos
               </Text>
             </View>
             <View style={styles.itemWrapper}>
@@ -196,9 +216,11 @@ class Menu extends React.Component {
               />
               <Text
                 style={styles.routes}
-                onPress={() => { navigate('MyWanted'); }}
+                onPress={() => {
+                  navigate("MyWanted");
+                }}
               >
-              Quero ter
+                Quero ter
               </Text>
             </View>
             <View style={styles.itemWrapper}>
@@ -211,9 +233,11 @@ class Menu extends React.Component {
               />
               <Text
                 style={styles.routes}
-                onPress={() => { navigate('Scanner'); }}
+                onPress={() => {
+                  navigate("Scanner");
+                }}
               >
-              Buscar por Código de Barras
+                Buscar por Código de Barras
               </Text>
             </View>
             <View style={styles.itemWrapper}>
@@ -226,9 +250,11 @@ class Menu extends React.Component {
               />
               <Text
                 style={styles.routes}
-                onPress={() => { navigate('CreateBook'); }}
+                onPress={() => {
+                  navigate("CreateBook");
+                }}
               >
-              Cadastrar novo quadrinho
+                Cadastrar novo quadrinho
               </Text>
             </View>
             <View style={styles.itemWrapper}>
@@ -241,9 +267,11 @@ class Menu extends React.Component {
               />
               <Text
                 style={styles.routes}
-                onPress={() => { navigate('UserBooks'); }}
+                onPress={() => {
+                  navigate("UserBooks");
+                }}
               >
-              Quadrinhos enviados
+                Quadrinhos enviados
               </Text>
             </View>
             <View style={[styles.itemWrapper]}>
@@ -256,9 +284,11 @@ class Menu extends React.Component {
               />
               <Text
                 style={styles.routes}
-                onPress={() => { navigate('Search'); }}
+                onPress={() => {
+                  navigate("Search");
+                }}
               >
-              Buscar quadrinho
+                Buscar quadrinho
               </Text>
             </View>
           </View>
@@ -268,10 +298,10 @@ class Menu extends React.Component {
               style={styles.logout}
               onPress={() => {
                 onSignOut();
-                navigate('Root');
+                navigate("Root");
               }}
             >
-                Logout
+              Logout
             </Text>
           </View>
         </SafeAreaView>

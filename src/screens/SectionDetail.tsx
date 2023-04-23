@@ -6,7 +6,7 @@ import ErrorState from "../components/ErrorState";
 
 export default function SectionDetailScreen({ navigation, route }) {
   const { section } = route.params;
-  const { data, isLoading, refetch } = useSection(section.slug);
+  const { data, isLoading, refetch } = useSection(section.id);
   if (isLoading) return <Loading />;
   if (!data) return <ErrorState />;
 

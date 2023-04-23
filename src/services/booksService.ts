@@ -1,27 +1,26 @@
-import api from "../infra/api";
+import { gqlClient } from "../infra/gqlClient";
 import { BookDetails } from "../types/Book";
 import { useQuery } from "react-query";
+import { getBookByIdQuery } from "../infra/BookQueries";
 
-const fetchBooks = async (): Promise<BookDetails[]> => {
-  const { data } = await api.get<BookDetails[]>("books");
-  return data;
+const fetchBookById = async (bookId: string): Promise<BookDetails> => {
+  if (!bookId) return;
+  const { book } = await gqlClient.request<{ book: BookDetails }>(
+    getBookByIdQuery(bookId)
+  );
+  return book;
 };
-
-export const useBooks = () => useQuery("books", fetchBooks);
-
-const fetchBook = async (bookId: string): Promise<BookDetails> => {
-  const { data } = await api.get<BookDetails>(`books/${bookId}`);
-  return data;
-};
-
-export const useBook = (bookId: string) =>
-  useQuery(["books", bookId], () => fetchBook(bookId));
 
 const fetchBookByISBN = async (isbn: string): Promise<BookDetails> => {
-  if (!isbn) return null;
-  const { data } = await api.get<BookDetails>(`books/isbn/${isbn}`);
-  return data;
+  if (!isbn) return;
+  const { book } = await gqlClient.request<{ book: BookDetails }>(
+    getBookByIdQuery(isbn)
+  );
+  return book;
 };
 
-export const getBookByISBN = (isbn: string) =>
-  useQuery(["books", isbn], () => fetchBookByISBN(isbn));
+export const useBookById = (bookId: string) =>
+  useQuery(["books", bookId], () => fetchBookById(bookId));
+
+export const useBookByISBN = (isbn: string) =>
+  useQuery(["books", "isbn", isbn], () => fetchBookByISBN(isbn));

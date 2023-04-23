@@ -13,7 +13,7 @@ export default function BooksList({ books, onClickBook }) {
           <BookThumbnail book={book} onClickBook={() => onClickBook(book)} />
         </View>
       )}
-      keyExtractor={(item, index) => index.toString()}
+      keyExtractor={({ id }) => id}
     />
   );
 }

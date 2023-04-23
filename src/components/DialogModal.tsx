@@ -1,4 +1,3 @@
-import React from "react";
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "../config/colors";
 

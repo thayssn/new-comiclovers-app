@@ -14,7 +14,7 @@ import Loading from "../components/Loading";
 import Review from "../components/Review";
 import colors from "../config/colors";
 import spacing from "../config/spacing";
-import { useBook } from "../services/booksService";
+import { useBookById } from "../services/booksService";
 import { capitalizeFirstLetter } from "../utils/typography";
 
 const { height: windowHeight } = Dimensions.get("window");
@@ -28,12 +28,11 @@ const BookProp = ({ label, value }) => (
 
 const BookDetailScreen = ({ route }) => {
   const { book } = route.params;
-  const { data, isLoading, refetch } = useBook(book.id);
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const { data, isLoading, refetch } = useBookById(book.id);
   if (isLoading) return <Loading />;
   if (!data) return null;
   const {
-    thumbnail,
+    cover,
     publishing_date,
     edition,
     publisher,
@@ -42,33 +41,47 @@ const BookDetailScreen = ({ route }) => {
     isbn,
     title,
     writers,
+    illustrators,
     reviews,
     price,
     pages,
+    format,
   } = data;
 
   const formattedDate = new Intl.DateTimeFormat("pt-BR", {
     year: "numeric",
-    month: "short",
+    month: "long",
   }).format(new Date(publishing_date));
   const formattedPrice = Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
   }).format(price);
-  const ratingsSum = reviews.reduce((sum, review) => sum + review.rating, 0);
-  const rating = ratingsSum / reviews.length;
+  const ratingsSum =
+    reviews.reduce((sum, review) => sum + review.rating, 0) || 0;
+  const rating = ratingsSum / reviews.length || 0;
 
   const bookProps = [
     {
       label: "Avaliação",
-      value: <Rating readonly startingValue={rating} imageSize={16} />,
+      value: (
+        <View style={styles.ratingBookProps}>
+          <Rating readonly startingValue={rating} imageSize={18} />
+          <Text>{reviews.length ? rating : "Nenhuma"}</Text>
+        </View>
+      ),
     },
-    { label: "Preço", value: capitalizeFirstLetter(formattedPrice) },
+    { label: "Preço", value: formattedPrice },
     { label: "Edição", value: edition },
-    { label: "Data de publicação", value: formattedDate },
-    { label: "Licenciado por", value: licensor },
-    { label: "Publicado por", value: publisher },
     { label: "Número de páginas", value: pages },
+    { label: "Formato", value: format },
+    {
+      label: "Data de publicação",
+      value: capitalizeFirstLetter(formattedDate),
+    },
+    { label: "Roteiristas", value: writers.join(", ") },
+    { label: "Ilustradores", value: illustrators.join(", ") },
+    { label: "Editora", value: publisher },
+    { label: "Licenciado por", value: licensor },
     { label: "ISBN", value: isbn },
   ];
 
@@ -79,7 +92,7 @@ const BookDetailScreen = ({ route }) => {
         <RefreshControl refreshing={isLoading} onRefresh={refetch} />
       }
     >
-      <Image source={{ uri: thumbnail }} style={[styles.headerImage]} />
+      <Image source={{ uri: cover?.url }} style={[styles.headerImage]} />
       <View style={[styles.header]}>
         <View style={styles.headerContent}>
           <Text style={styles.title}>{title}</Text>
@@ -93,10 +106,14 @@ const BookDetailScreen = ({ route }) => {
         ))}
       </View>
       <View style={styles.reviewsContainer}>
-        <Text style={styles.title}>Avaliações</Text>
-        {reviews.map((review, index) => (
-          <Review review={review} key={index} />
-        ))}
+        <Text style={styles.reviewsTitle}>Avaliações</Text>
+        {reviews.length ? (
+          reviews?.map((review, index) => (
+            <Review review={review} key={index} />
+          ))
+        ) : (
+          <Text>Nenhuma avaliação</Text>
+        )}
       </View>
     </ScrollView>
   );
@@ -111,6 +128,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
+    right: 0,
     width: "100%",
     height: 400,
     resizeMode: "cover",
@@ -122,13 +140,12 @@ const styles = StyleSheet.create({
   headerContent: {
     backgroundColor: "#FFF",
     paddingTop: spacing.small,
-    paddingBottom: spacing.medium,
     paddingHorizontal: spacing.medium,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: spacing.tiny,
+    marginBottom: spacing.small,
   },
   author: {
     fontSize: 16,
@@ -156,9 +173,11 @@ const styles = StyleSheet.create({
     color: colors.mediumDark,
   },
   bookPropsValue: {
+    flexShrink: 0,
     color: colors.dark,
     fontSize: 16,
     marginLeft: 10,
+    maxWidth: "50%",
   },
   isbn: {
     fontSize: 14,
@@ -167,7 +186,19 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   reviewsContainer: {
-    margin: 20,
+    padding: 20,
+    marginVertical: 20,
+  },
+  reviewsTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: spacing.large,
+  },
+  ratingBookProps: {
+    flex: 1,
+    flexDirection: "row",
+    gap: spacing.small,
+    alignItems: "center", //
   },
 });
 

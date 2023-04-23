@@ -1,18 +1,23 @@
-import api from "../infra/api";
 import { useQuery } from "react-query";
 import Section from "../types/Section";
+import { getSectionsQuery, getSectionByIdQuery } from "../infra/SectionQueries";
+import { gqlClient } from "../infra/gqlClient";
 
 const fetchSections = async (): Promise<Section[]> => {
-  const { data } = await api.get<Section[]>("sections");
-  return data;
+  const { sections } = await gqlClient.request<{ sections: Section[] }>(
+    getSectionsQuery()
+  );
+  return sections;
 };
 
-export const useSections = () => useQuery("curated", fetchSections);
-
-const fetchSection = async (slug: string): Promise<Section> => {
-  const { data } = await api.get<Section>(`sections/${slug}`);
-  return data;
+const fetchSection = async (id: string): Promise<Section> => {
+  const { section } = await gqlClient.request<{ section: Section }>(
+    getSectionByIdQuery(id)
+  );
+  return section;
 };
 
-export const useSection = (slug: string) =>
-  useQuery(["sections", slug], () => fetchSection(slug));
+export const useSections = () => useQuery("sections", fetchSections);
+
+export const useSection = (id: string) =>
+  useQuery(["sections", id], () => fetchSection(id));

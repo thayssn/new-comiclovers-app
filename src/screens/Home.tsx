@@ -13,10 +13,13 @@ import {
 import Section from "../types/Section";
 import spacing from "../config/spacing";
 import { Icon } from "react-native-elements";
+import ErrorState from "../components/ErrorState";
 
 export default function HomeScreen({ navigation }) {
-  const { data, isLoading, refetch } = useSections();
+  const { data, isLoading, refetch, isError } = useSections();
   if (isLoading) return <Loading />;
+
+  if (isError) return <ErrorState />;
 
   const onClickBook = (book: Book) =>
     navigation.navigate("BookDetailScreen", { book });
@@ -32,18 +35,14 @@ export default function HomeScreen({ navigation }) {
       }
     >
       {data.map((section) => (
-        <View style={styles.section} key={section.slug}>
+        <View style={styles.section} key={section.id}>
           <TouchableWithoutFeedback onPress={() => onClickSection(section)}>
             <View style={styles.titleInfo}>
               <Text style={styles.sectionTitle}>{section.title}</Text>
               <Icon name="chevron-right" type="entypo" size={20} />
             </View>
           </TouchableWithoutFeedback>
-          <BooksList
-            key={section.slug}
-            books={section.books}
-            onClickBook={onClickBook}
-          />
+          <BooksList books={section.books} onClickBook={onClickBook} />
         </View>
       ))}
     </ScrollView>
