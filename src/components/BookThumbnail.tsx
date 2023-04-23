@@ -16,10 +16,10 @@ export default function BookThumbnail({ book, onClickBook }) {
   return (
     <TouchableWithoutFeedback onPress={onClickBook}>
       <View style={styles.book_item}>
-        {cover.url ? (
+        {cover?.url ? (
           <Image
             source={{
-              uri: `${cover.url}`,
+              uri: `${cover?.url}`,
             }}
             style={styles.book_item_image}
           />

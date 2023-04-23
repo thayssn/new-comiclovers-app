@@ -1,31 +1,33 @@
 import { gql } from "graphql-request";
 
-export const getSectionsQuery = (limit = null) => gql`query Sections {
-  sections (first: ${limit}) {
-    books {
-      cover {
-        url
-      }
-      description
-      title
+export const getSectionsQuery = () => gql`
+  query Sections {
+    sections {
       id
+      title
+      books(first: 10) {
+        cover {
+          url
+        }
+        edition
+        title
+        id
+      }
     }
-    id
-    title
   }
-}`;
+`;
 
 export const getSectionByIdQuery = (id: string) => `query SectionById {
-  sections (where: { id: "${id}"}) {
+  section (where: { id: "${id}"}) {
+    id
+    title
     books {
       cover {
         url
       }
-      description
       title
+      edition
       id
     }
-    id
-    title
   }
 }`;

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { Rating } from "react-native-ratings";
+import BookThumbnail from "../components/BookThumbnail";
 import Loading from "../components/Loading";
 import Review from "../components/Review";
 import colors from "../config/colors";
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     gap: spacing.small,
-    alignItems: "center", //
+    alignItems: "center",
   },
 });
 

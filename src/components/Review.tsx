@@ -6,7 +6,6 @@ import { BookReview } from "../types/Book";
 
 export default function Review({ review }: { review: BookReview }) {
   const { user_name, rating, text, published_at } = review;
-  console.log("🔥🔥🔥", published_at);
   const formattedDate = new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
     month: "2-digit",
