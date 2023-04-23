@@ -18,7 +18,6 @@ export default function ReviewModal({ visible, onClose, onSubmit }) {
 
   const handleRatingPress = (value) => {
     setRating(value);
-    console.log(value);
   };
 
   const handleSubmit = () => {
