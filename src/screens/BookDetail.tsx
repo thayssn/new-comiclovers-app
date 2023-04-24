@@ -62,8 +62,10 @@ const BookDetailScreen = ({ route }) => {
         <RefreshControl refreshing={isLoading} onRefresh={refetch} />
       }
     >
-      <Image source={{ uri: cover?.url }} style={[styles.headerImage]} />
       <View style={[styles.header]}>
+        {cover && (
+          <Image source={{ uri: cover?.url }} style={[styles.headerImage]} />
+        )}
         <View style={styles.headerContent}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.author}>{writers.join(", ")}</Text>
@@ -116,16 +118,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerImage: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
     width: "100%",
-    height: 400,
-    resizeMode: "cover",
+    height: 200,
+    resizeMode: "contain",
   },
   header: {
-    height: windowHeight / 3,
+    paddingVertical: spacing.medium,
+    paddingHorizontal: spacing.small,
     justifyContent: "flex-end",
   },
   headerContent: {
@@ -136,17 +135,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    marginTop: spacing.small,
     marginBottom: spacing.small,
+    textAlign: "center",
   },
   author: {
     fontSize: 16,
     color: "#888",
+    textAlign: "center",
   },
   content: {
     flex: 1,
     backgroundColor: "#fff",
     paddingHorizontal: spacing.medium,
-    paddingVertical: spacing.large,
+    paddingVertical: spacing.medium,
     zIndex: 1,
   },
   description: {

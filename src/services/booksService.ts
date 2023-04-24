@@ -1,7 +1,11 @@
 import { gqlClientRead, gqlClientWrite } from "../infra/gqlClient";
 import Book, { BookDetails, BookReview } from "../types/Book";
 import { useQuery } from "react-query";
-import { getBookByIdQuery, getBooksByTitle } from "../infra/BookQueries";
+import {
+  getBookByIdQuery,
+  getBookByISBNQuery,
+  getBooksByTitleQuery,
+} from "../infra/BookQueries";
 import { addBookReview } from "../infra/BookMutations";
 
 const fetchBookById = async (bookId: string): Promise<BookDetails> => {
@@ -12,10 +16,10 @@ const fetchBookById = async (bookId: string): Promise<BookDetails> => {
   return book;
 };
 
-const fetchBookByISBN = async (isbn: string): Promise<BookDetails> => {
+export const fetchBookByISBN = async (isbn: string): Promise<BookDetails> => {
   if (!isbn) return;
   const { book } = await gqlClientRead.request<{ book: BookDetails }>(
-    getBookByIdQuery(isbn)
+    getBookByISBNQuery(isbn)
   );
   return book;
 };
@@ -23,7 +27,7 @@ const fetchBookByISBN = async (isbn: string): Promise<BookDetails> => {
 const fetchBooksByTitle = async (title: string): Promise<Book[]> => {
   if (!title) return;
   const { books } = await gqlClientRead.request<{ books: Book[] }>(
-    getBooksByTitle(title)
+    getBooksByTitleQuery(title)
   );
   return books;
 };

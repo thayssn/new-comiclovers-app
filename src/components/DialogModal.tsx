@@ -1,14 +1,20 @@
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "../config/colors";
 
-const DialogModal = ({ visible, title, description, buttons, children }) => {
+const DialogModal = ({
+  visible,
+  title,
+  description,
+  buttons,
+  children = null,
+}) => {
   return (
     <Modal animationType="fade" transparent={true} visible={visible}>
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{description}</Text>
-          {children}
+          {children ?? null}
           <View style={styles.buttonContainer}>
             {buttons.map((button, index) => (
               <TouchableOpacity

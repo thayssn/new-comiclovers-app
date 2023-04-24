@@ -3,26 +3,36 @@ import { StyleSheet, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useEffect, useState } from "react";
 import DialogModal from "../components/DialogModal";
-import { useBookByISBN } from "../services/booksService";
+import { fetchBookByISBN, useBookByISBN } from "../services/booksService";
 
 export default function ScannerScreen({ navigation }) {
   const [scanned, setScanned] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const [barcodeData, setBarcodeData] = useState(null);
+  const [book, setBook] = useState(null);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   useEffect(() => {
     if (!permission || !permission.granted) requestPermission();
   }, []);
 
-  const { data: book, isFetching } = useBookByISBN(barcodeData);
+  // const { data: book, isFetching } = useBookByISBN(barcodeData);
+  // console.log("isbn 📖📖📖📖📖📖", book);
 
   const openDialog = () => {
     setShowDialog(true);
   };
 
-  const handleBarCodeScanned = ({ data }) => {
+  const handleBarCodeScanned = async ({ data }) => {
     setScanned(true);
     setBarcodeData(data);
+    try {
+      const book = await fetchBookByISBN(data);
+      setBook(book);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      openDialog();
+    }
   };
 
   const handleScanAgain = () => {
@@ -35,11 +45,11 @@ export default function ScannerScreen({ navigation }) {
     navigation.navigate("BookDetailScreen", { book });
   };
 
-  useEffect(() => {
-    if (scanned && !isFetching) {
-      openDialog();
-    }
-  }, [scanned, isFetching, book]);
+  // useEffect(() => {
+  //   if (scanned && !isFetching) {
+  //     openDialog();
+  //   }
+  // }, [scanned, isFetching, book]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -50,7 +60,6 @@ export default function ScannerScreen({ navigation }) {
       {scanned && (
         <DialogModal
           visible={showDialog}
-          onClose={() => setShowDialog(false)}
           title={"Código ISBN"}
           description={`${barcodeData}`}
           buttons={[
@@ -65,15 +74,3 @@ export default function ScannerScreen({ navigation }) {
     </View>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    objectFit: "cover",
-  },
-  camera: { width: "100%", height: "100%" },
-  buttonContainer: {},
-  button: {},
-  text: {},
-});

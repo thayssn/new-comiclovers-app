@@ -43,15 +43,15 @@ export const getBookByIdQuery = (id: string) => gql`
   }
 `;
 
-export const getBookByISBN = (isbn: string) => gql`
-  query BookById {
+export const getBookByISBNQuery = (isbn: string) => gql`
+  query BookByISBN {
     book(where: { isbn: "${isbn}" }, stage: PUBLISHED) {
-      ${completeFields}
+      ${basicFields}
     }
   }
 `;
 
-export const getBooksByTitle = (title: string) => gql`
+export const getBooksByTitleQuery = (title: string) => gql`
   query BooksSearch {
     books(where: { title_contains: "${title}" }, stage: PUBLISHED) {
       ${basicFields}
