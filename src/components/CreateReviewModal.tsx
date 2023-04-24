@@ -10,33 +10,50 @@ import {
 import spacing from "../config/spacing";
 import colors from "../config/colors";
 import TextButton from "./Button";
+import { BookReview } from "../types/Book";
 
 export default function ReviewModal({ visible, onClose, onSubmit }) {
   const [rating, setRating] = useState(0);
   const [text, setText] = useState("");
   const [name, setName] = useState("");
+  const [error, setError] = useState(null);
 
   const handleRatingPress = (value) => {
     setRating(value);
   };
 
-  const handleSubmit = () => {
-    if (rating === 0 || text === "") {
-      return;
-    }
-
-    const review = {
-      user_name: name,
-      text,
-      rating,
-      published_at: Date.now(),
-    };
-
-    onSubmit(review);
+  const handleClose = () => {
     setRating(0);
     setText("");
     setName("");
+    setError(null);
     onClose();
+  };
+
+  const handleSubmit = () => {
+    if (name === "") {
+      setError("Nome obrigatório");
+      return;
+    }
+    if (rating === 0) {
+      setError("Você precisa dar uma nota");
+      return;
+    }
+    if (text === "") {
+      setError("Por favor, deixe um comentário.");
+      return;
+    }
+
+    const review: BookReview = {
+      user_id: "fake-user-id",
+      user_name: name,
+      text,
+      rating,
+      published_at: new Date(Date.now()).toISOString(),
+    };
+
+    onSubmit(review);
+    handleClose();
   };
 
   return (
@@ -77,7 +94,15 @@ export default function ReviewModal({ visible, onClose, onSubmit }) {
             value={text}
             onChangeText={setText}
           />
-          <TextButton text="Enviar" onPress={handleSubmit} />
+          {error && <Text style={styles.error}>{error}</Text>}
+          <View style={styles.buttonGroup}>
+            <TextButton
+              text="Cancelar"
+              onPress={handleClose}
+              style={{ backgroundColor: colors.lightDark }}
+            />
+            <TextButton text="Enviar" onPress={handleSubmit} />
+          </View>
         </View>
       </View>
     </Modal>
@@ -129,5 +154,15 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 16,
     height: 100,
+  },
+  buttonGroup: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: spacing.small,
+  },
+  error: {
+    color: colors.danger,
+    marginBottom: spacing.medium,
   },
 });

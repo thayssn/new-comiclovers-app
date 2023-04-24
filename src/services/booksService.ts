@@ -1,11 +1,12 @@
-import { gqlClient } from "../infra/gqlClient";
-import Book, { BookDetails } from "../types/Book";
+import { gqlClientRead, gqlClientWrite } from "../infra/gqlClient";
+import Book, { BookDetails, BookReview } from "../types/Book";
 import { useQuery } from "react-query";
 import { getBookByIdQuery, getBooksByTitle } from "../infra/BookQueries";
+import { addBookReview } from "../infra/BookMutations";
 
 const fetchBookById = async (bookId: string): Promise<BookDetails> => {
   if (!bookId) return;
-  const { book } = await gqlClient.request<{ book: BookDetails }>(
+  const { book } = await gqlClientRead.request<{ book: BookDetails }>(
     getBookByIdQuery(bookId)
   );
   return book;
@@ -13,7 +14,7 @@ const fetchBookById = async (bookId: string): Promise<BookDetails> => {
 
 const fetchBookByISBN = async (isbn: string): Promise<BookDetails> => {
   if (!isbn) return;
-  const { book } = await gqlClient.request<{ book: BookDetails }>(
+  const { book } = await gqlClientRead.request<{ book: BookDetails }>(
     getBookByIdQuery(isbn)
   );
   return book;
@@ -21,10 +22,17 @@ const fetchBookByISBN = async (isbn: string): Promise<BookDetails> => {
 
 const fetchBooksByTitle = async (title: string): Promise<Book[]> => {
   if (!title) return;
-  const { books } = await gqlClient.request<{ books: Book[] }>(
+  const { books } = await gqlClientRead.request<{ books: Book[] }>(
     getBooksByTitle(title)
   );
   return books;
+};
+
+export const createBookReview = async (bookId: string, review: BookReview) => {
+  const { book } = await gqlClientWrite.request<{ book: Book[] }>(
+    addBookReview(bookId, review)
+  );
+  return book;
 };
 
 export const useBookById = (bookId: string) =>

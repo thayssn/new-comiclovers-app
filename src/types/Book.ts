@@ -12,7 +12,7 @@ export type BookReview = {
   user_name: string;
   text: string;
   rating: number;
-  published_at: number;
+  published_at: string;
 };
 
 export type BookDetails = Book & {

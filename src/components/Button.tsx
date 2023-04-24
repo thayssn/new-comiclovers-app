@@ -1,9 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import colors from "../config/colors";
+import spacing from "../config/spacing";
 
-export default function TextButton({ text, onPress }) {
+export default function TextButton({ text, onPress, style = {} }) {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
       <Text style={styles.buttonText}>{text}</Text>
     </TouchableOpacity>
   );
@@ -12,8 +13,9 @@ export default function TextButton({ text, onPress }) {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.primary,
-    borderRadius: 6,
-    padding: 15,
+    borderRadius: spacing.tiny,
+    padding: spacing.medium,
+    flexGrow: 1,
   },
   buttonText: {
     fontSize: 14,

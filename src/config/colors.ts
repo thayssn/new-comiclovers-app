@@ -8,6 +8,7 @@ const colors = {
   transparent: "transparent",
   translucid: "rgba(0, 0, 0, 0.5)",
   golden: "#f1c40f",
+  danger: "#DC3545",
 };
 
 export type ColorKeys =
@@ -19,6 +20,7 @@ export type ColorKeys =
   | "strongDark"
   | "transparent"
   | "translucid"
-  | "golden";
+  | "golden"
+  | "danger";
 
 export default colors;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
+  Alert,
 } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import TextButton from "../components/Button";
@@ -15,6 +16,8 @@ import Loading from "../components/Loading";
 import Review from "../components/Review";
 import colors from "../config/colors";
 import spacing from "../config/spacing";
+import { createBookReview } from "../services/booksService";
+import { BookReview } from "../types/Book";
 import useBookDetails from "./useBookDetails";
 
 const { height: windowHeight } = Dimensions.get("window");
@@ -30,12 +33,28 @@ const BookDetailScreen = ({ route }) => {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const { book } = route.params;
   const { data, isLoading, isError, refetch, bookProps } = useBookDetails(book);
+  const [userReview, setUserReview] = useState<BookReview>(null);
+
+  const handleSubmitReview = async (review: BookReview) => {
+    try {
+      await createBookReview(book.id, review);
+      setUserReview(review);
+    } catch (err) {
+      console.log(err);
+      Alert.alert("Ocorreu um erro ao enviar sua avaliação!");
+    } finally {
+      setShowRatingModal(false);
+    }
+  };
 
   if (isLoading) return <Loading />;
   if (isError) return <ErrorState />;
   if (!data) return null;
 
   const { cover, description, title, writers, reviews } = data;
+  const hasUserReview = reviews.find(
+    ({ user_id }) => user_id === "fake-user-id"
+  );
   return (
     <ScrollView
       style={styles.container}
@@ -65,17 +84,26 @@ const BookDetailScreen = ({ route }) => {
         ) : (
           <Text style={styles.emptyReviews}>Nenhuma avaliação</Text>
         )}
-
-        <TextButton
-          text="Avaliar"
-          onPress={() => {
-            setShowRatingModal(true);
-          }}
-        />
+        {userReview && (
+          <>
+            <Text style={styles.warning}>
+              Seu comentário está sendo revisado! Logo ele será publicado.
+            </Text>
+            <Review review={userReview} ghost />
+          </>
+        )}
+        {!userReview && !hasUserReview && (
+          <TextButton
+            text="Avaliar"
+            onPress={() => {
+              setShowRatingModal(true);
+            }}
+          />
+        )}
         <ReviewModal
           onClose={() => setShowRatingModal(false)}
           visible={showRatingModal}
-          onSubmit={() => setShowRatingModal(false)}
+          onSubmit={handleSubmitReview}
         />
       </View>
     </ScrollView>
@@ -159,6 +187,13 @@ const styles = StyleSheet.create({
   ratingButton: {
     padding: spacing.medium,
     color: colors.light,
+  },
+  warning: {
+    color: colors.lightDark,
+    textAlign: "center",
+    fontStyle: "italic",
+    fontSize: 14,
+    marginBottom: spacing.medium,
   },
 });
 

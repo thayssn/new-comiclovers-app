@@ -37,7 +37,7 @@ reviews {
 
 export const getBookByIdQuery = (id: string) => gql`
   query BookById {
-    book(where: { id: "${id}" }) {
+    book(where: { id: "${id}" }, stage: PUBLISHED) {
       ${completeFields}
     }
   }
@@ -45,7 +45,7 @@ export const getBookByIdQuery = (id: string) => gql`
 
 export const getBookByISBN = (isbn: string) => gql`
   query BookById {
-    book(where: { isbn: "${isbn}" }) {
+    book(where: { isbn: "${isbn}" }, stage: PUBLISHED) {
       ${completeFields}
     }
   }
@@ -53,7 +53,7 @@ export const getBookByISBN = (isbn: string) => gql`
 
 export const getBooksByTitle = (title: string) => gql`
   query BooksSearch {
-    books(where: { title_contains: "${title}" }) {
+    books(where: { title_contains: "${title}" }, stage: PUBLISHED) {
       ${basicFields}
     }
   }

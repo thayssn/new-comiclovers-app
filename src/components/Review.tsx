@@ -4,7 +4,13 @@ import colors from "../config/colors";
 import spacing from "../config/spacing";
 import { BookReview } from "../types/Book";
 
-export default function Review({ review }: { review: BookReview }) {
+export default function Review({
+  review,
+  ghost = false,
+}: {
+  review: BookReview;
+  ghost?: boolean;
+}) {
   const { user_name, rating, text, published_at } = review;
   const formattedDate = new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
@@ -13,16 +19,23 @@ export default function Review({ review }: { review: BookReview }) {
   }).format(new Date(published_at ?? ""));
 
   return (
-    <View style={styles.reviewContainer}>
-      <Text style={styles.userName}>{user_name}</Text>
-      <Text style={styles.date}>{formattedDate}</Text>
+    <View style={[styles.reviewContainer]}>
+      <Text style={[styles.userName, ...(ghost ? [styles.ghost] : [])]}>
+        {user_name}
+      </Text>
+      <Text style={[styles.date, ...(ghost ? [styles.ghost] : [])]}>
+        {formattedDate}
+      </Text>
       <Rating
         startingValue={rating}
         readonly
         imageSize={24}
         style={styles.rating}
+        ratingCount={rating}
       />
-      <Text style={styles.text}>{text}</Text>
+      <Text style={[styles.text, ...(ghost ? [styles.ghost] : [])]}>
+        {text}
+      </Text>
     </View>
   );
 }
@@ -53,5 +66,8 @@ const styles = StyleSheet.create({
   },
   rating: {
     marginBottom: spacing.small,
+  },
+  ghost: {
+    opacity: 0.4,
   },
 });

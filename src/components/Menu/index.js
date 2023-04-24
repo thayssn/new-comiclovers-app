@@ -80,11 +80,9 @@ class Menu extends React.Component {
         },
       });
 
-      // eslint-disable-next-line react/destructuring-assignment
       const { profile_picture: defaultImg } = this.state;
 
       this.setState({
-        // eslint-disable-next-line camelcase
         profile_picture: `${BASE_URL}/${profile_picture}` || defaultImg,
         name,
       });
