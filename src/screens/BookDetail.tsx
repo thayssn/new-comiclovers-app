@@ -1,10 +1,20 @@
-import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import BookReviews from "../components/BookReviews";
 import ErrorState from "../components/ErrorState";
 import Loading from "../components/Loading";
+import TextButton from "../components/TextButton";
 import colors from "../config/colors";
 import spacing from "../config/spacing";
+import { addBookToCollection } from "../services/collectionsService";
 import useBookDetails from "./useBookDetails";
 
 const BookProp = ({ label, value }) => (
@@ -46,6 +56,7 @@ export default function BookDetailScreen({ route }) {
           <BookProp key={index} {...prop} />
         ))}
       </View>
+
       <BookReviews reviews={reviews} book={book} />
     </ScrollView>
   );

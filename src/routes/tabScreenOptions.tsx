@@ -1,16 +1,26 @@
+import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
+import { Image, View } from "react-native";
 import { Icon } from "react-native-elements";
 import colors from "../config/colors";
 import spacing from "../config/spacing";
+const logo = require("../../assets/logo-text.png");
 
-export default ({ navigation }): any => ({
+function LogoTitle() {
+  return (
+    <Image
+      style={{ width: 200, marginTop: 2, resizeMode: "contain" }}
+      source={logo}
+    />
+  );
+}
+
+export default ({ navigation }): BottomTabNavigationOptions => ({
+  headerTitle: (props) => <LogoTitle />,
   tabBarShowLabel: false,
-  activeTintColor: colors.primary,
+  tabBarActiveTintColor: colors.primary,
+  tabBarHideOnKeyboard: true,
   headerStyle: {
     backgroundColor: colors.primary,
-  },
-  headerTintColor: colors.light,
-  headerTitleStyle: {
-    fontWeight: "bold",
   },
   // headerLeft: (props) => (
   //   <Icon
@@ -27,15 +37,31 @@ export default ({ navigation }): any => ({
   //   />
   // ),
   headerRight: (props) => (
-    <Icon
-      {...props}
-      name="ios-search"
-      type="ionicon"
-      color={colors.light}
-      size={24}
-      underlayColor="transparent"
-      containerStyle={{ paddingRight: spacing.small }}
-      onPress={() => navigation.navigate("BookSearchScreen")}
-    />
+    <View
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        gap: spacing.medium,
+        alignItems: "center",
+        marginRight: spacing.medium,
+      }}
+    >
+      <Icon
+        {...props}
+        name="search"
+        type="octicon"
+        color={colors.light}
+        size={24}
+        onPress={() => navigation.navigate("BookSearchScreen")}
+      />
+      {/* <Icon
+        {...props}
+        name="barcode-outline"
+        type="ionicon"
+        color={colors.light}
+        size={34}
+        onPress={() => navigation.navigate("ScannerScreen")}
+      /> */}
+    </View>
   ),
 });

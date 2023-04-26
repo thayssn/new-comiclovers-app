@@ -1,7 +1,8 @@
 const colors = {
   primary: "#00A5E2",
+  lightPrimary: "#9bd4e8",
   light: "#FFFFFF",
-  lightDark: "#cfcfcf",
+  lightDark: "#dae1e3",
   mediumDark: "#888888",
   dark: "#333333",
   strongDark: "#000000",
@@ -13,6 +14,7 @@ const colors = {
 
 export type ColorKeys =
   | "primary"
+  | "lightPrimary"
   | "light"
   | "lightDark"
   | "mediumDark"

@@ -14,11 +14,10 @@ import BookSearchScreen from "../screens/BookSearch";
 import CollectionsScreen from "../screens/Collections";
 import CollectionDetailScreen from "../screens/CollectionDetail";
 import CreateCollectionScreen from "../screens/CreateCollection";
-import colors from "../config/colors";
-import spacing from "../config/spacing";
 
 type HomeStackParamList = {
   HomeScreen: undefined;
+  ScannerScreen: undefined;
   BookSearchScreen: undefined;
   BookDetailScreen: { book: Book };
   SectionDetailScreen: { section: Section };
@@ -28,6 +27,10 @@ type CollectionsStackParamList = {
   CollectionsScreen: undefined;
   CreateCollectionScreen: undefined;
   CollectionDetailScreen: { collection: Section };
+  AddBooksToCollectionScreen: {
+    collectionId: string;
+    booksInCollection: Book[];
+  };
 };
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParamList>();
@@ -54,6 +57,13 @@ function HomeNavigation() {
         component={BookSearchScreen}
         options={{ title: "Busca" }}
       />
+      {/* <HomeStackNavigator.Screen
+        name="ScannerScreen"
+        component={ScannerScreen}
+        options={{
+          title: "Escanear",
+        }}
+      /> */}
     </HomeStackNavigator.Navigator>
   );
 }
@@ -66,7 +76,7 @@ function CollectionsNavigation() {
       <CollectionsStackNavigator.Screen
         name="CollectionsScreen"
         component={CollectionsScreen}
-        options={{ title: "Todas" }}
+        options={{ title: "Minhas Coleções" }}
       />
       <CollectionsStackNavigator.Screen
         name="CreateCollectionScreen"
@@ -79,6 +89,11 @@ function CollectionsNavigation() {
         options={({ route }) => ({
           title: route.params.collection.title,
         })}
+      />
+      <CollectionsStackNavigator.Screen
+        name="AddBooksToCollectionScreen"
+        component={BookSearchScreen}
+        options={{ title: "Adicionar livros à coleção" }}
       />
     </CollectionsStackNavigator.Navigator>
   );
@@ -95,9 +110,8 @@ export default function TabsNavigation() {
         name="HomeNavigation"
         component={HomeNavigation}
         options={{
-          title: "Comic Lovers",
           tabBarIcon: ({ color, size }) => (
-            <Icon name="home" color={color} size={size} />
+            <Icon name="home" type="octicon" color={color} size={size} />
           ),
         }}
       />
@@ -118,7 +132,12 @@ export default function TabsNavigation() {
         options={{
           title: "Escanear",
           tabBarIcon: ({ color, size }) => (
-            <Icon name="ios-barcode" type="ionicon" color={color} size={size} />
+            <Icon
+              name="barcode-outline"
+              type="ionicon"
+              color={color}
+              size={34}
+            />
           ),
           unmountOnBlur: true,
         }}

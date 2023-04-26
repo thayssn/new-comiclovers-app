@@ -34,7 +34,7 @@ export default function BookThumbnail({ book, onClickBook }) {
           </View>
         )}
         <Text style={styles.book_item_title}>
-          {`${title} ${edition ? `- ${edition} ` : ""}`}
+          {`${title} ${edition ? `(${edition})` : ""}`}
         </Text>
       </View>
     </TouchableWithoutFeedback>
@@ -55,11 +55,11 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: spacing.tiny,
   },
   book_item_title: {
     fontSize: 14,
     marginTop: spacing.small,
     textAlign: "center",
-    fontWeight: "bold",
   },
 });

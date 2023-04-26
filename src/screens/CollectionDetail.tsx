@@ -2,7 +2,7 @@ import Book from "../types/Book";
 import Loading from "../components/Loading";
 import BooksGrid from "../components/BooksGrid";
 import ErrorState from "../components/ErrorState";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   deleteCollection,
   getCollectionDetails,
@@ -11,7 +11,9 @@ import { StyleSheet, Text, View } from "react-native";
 import colors from "../config/colors";
 import spacing from "../config/spacing";
 import { Icon } from "react-native-elements";
-import { CommonActions } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
+import TextButton from "../components/TextButton";
+import { sortBooksByTitleAndEdition } from "../utils/sortBooksByTitleAndEdition";
 
 export default function CollectionDetailScreen({ navigation, route }) {
   const { id } = route.params.collection;
@@ -20,46 +22,43 @@ export default function CollectionDetailScreen({ navigation, route }) {
   const [isError, setIsError] = useState(false);
   const removeCollection = async () => {
     await deleteCollection(id);
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: "CollectionsScreen" }],
-      })
-    );
+    navigation.navigate("CollectionsScreen");
   };
 
-  navigation.setOptions({
-    headerRight: (props) => (
-      <Icon
-        {...props}
-        name="trash"
-        type="octicon"
-        color={colors.dark}
-        size={20}
-        containerStyle={{
-          paddingLeft: spacing.small,
-          marginRight: spacing.small,
-        }}
-        underlayColor="transparent"
-        onPress={() => removeCollection()}
-      />
-    ),
-  });
+  useFocusEffect(
+    useCallback(() => {
+      const fetchCollection = async () => {
+        setIsLoading(true);
+        try {
+          const collection = await getCollectionDetails(id);
+          setCollection(collection);
+        } catch (err) {
+          setIsError(true);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchCollection();
 
-  useEffect(() => {
-    const fetchCollection = async () => {
-      setIsLoading(true);
-      try {
-        const collection = await getCollectionDetails(id);
-        setCollection(collection);
-      } catch (err) {
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchCollection().then();
-  }, []);
+      navigation.setOptions({
+        headerRight: (props) => (
+          <Icon
+            {...props}
+            name="trash"
+            type="octicon"
+            color={colors.dark}
+            size={20}
+            containerStyle={{
+              paddingLeft: spacing.small,
+              marginRight: spacing.small,
+            }}
+            underlayColor="transparent"
+            onPress={() => removeCollection()}
+          />
+        ),
+      });
+    }, [])
+  );
 
   if (isLoading) return <Loading />;
   if (isError) return <ErrorState />;
@@ -67,23 +66,33 @@ export default function CollectionDetailScreen({ navigation, route }) {
   const onClickBook = (book: Book) =>
     navigation.navigate("BookDetailScreen", { book });
 
-  if (!collection || !collection.books.length)
-    return (
-      <View style={styles.container}>
-        <Text style={styles.emptyStateTitle}>
-          Adicione livros à sua coleção para listá-los aqui.
-        </Text>
-        <ErrorState />
-      </View>
-    );
-
   return (
     <View style={styles.container}>
-      <BooksGrid
-        books={collection?.books}
-        onClickBook={onClickBook}
-        isLoading={isLoading}
-      />
+      {!collection || !collection.books.length ? (
+        <View style={styles.container}>
+          <Text style={styles.emptyStateTitle}>
+            Adicione livros à sua coleção para listá-los aqui.
+          </Text>
+          <ErrorState />
+        </View>
+      ) : (
+        <BooksGrid
+          books={sortBooksByTitleAndEdition(collection.books)}
+          onClickBook={onClickBook}
+          isLoading={isLoading}
+        />
+      )}
+      <View>
+        <TextButton
+          text="Adicionar mais livros"
+          onPress={() =>
+            navigation.navigate("AddBooksToCollectionScreen", {
+              collectionId: id,
+              collectionBooks: collection.books,
+            })
+          }
+        />
+      </View>
     </View>
   );
 }

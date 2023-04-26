@@ -6,10 +6,12 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import spacing from "../config/spacing";
 import colors from "../config/colors";
-import TextButton from "./Button";
+import TextButton from "./TextButton";
 import { BookReview } from "../types/Book";
 
 export default function ReviewModal({ visible, onClose, onSubmit }) {
@@ -57,55 +59,60 @@ export default function ReviewModal({ visible, onClose, onSubmit }) {
   };
 
   return (
-    <Modal visible={visible} transparent={true} onRequestClose={onClose}>
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Escreva uma avaliação</Text>
-          <View style={styles.ratingContainer}>
-            <View style={styles.ratingStarsContainer}>
-              {[1, 2, 3, 4, 5].map((value) => (
-                <TouchableOpacity
-                  key={value}
-                  onPress={() => handleRatingPress(value)}
-                >
-                  <Text
-                    style={[
-                      styles.ratingStar,
-                      value <= rating && styles.ratingStarFilled,
-                    ]}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <Modal visible={visible} transparent={true} onRequestClose={onClose}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Escreva uma avaliação</Text>
+            <View style={styles.ratingContainer}>
+              <View style={styles.ratingStarsContainer}>
+                {[1, 2, 3, 4, 5].map((value) => (
+                  <TouchableOpacity
+                    key={value}
+                    onPress={() => handleRatingPress(value)}
                   >
-                    &#9733;
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                    <Text
+                      style={[
+                        styles.ratingStar,
+                        value <= rating && styles.ratingStarFilled,
+                      ]}
+                    >
+                      &#9733;
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Nome"
+              multiline={true}
+              value={name}
+              onChangeText={setName}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder="Escreva um comentário"
+              multiline={true}
+              value={text}
+              onChangeText={setText}
+            />
+            {error && <Text style={styles.error}>{error}</Text>}
+            <View style={styles.buttonGroup}>
+              <TextButton
+                text="Cancelar"
+                onPress={handleClose}
+                style={{ backgroundColor: colors.lightDark }}
+              />
+              <TextButton text="Enviar" onPress={handleSubmit} />
             </View>
           </View>
-          <TextInput
-            style={styles.input}
-            placeholder="Nome"
-            multiline={true}
-            value={name}
-            onChangeText={setName}
-          />
-          <TextInput
-            style={styles.textInput}
-            placeholder="Escreva um comentário"
-            multiline={true}
-            value={text}
-            onChangeText={setText}
-          />
-          {error && <Text style={styles.error}>{error}</Text>}
-          <View style={styles.buttonGroup}>
-            <TextButton
-              text="Cancelar"
-              onPress={handleClose}
-              style={{ backgroundColor: colors.lightDark }}
-            />
-            <TextButton text="Enviar" onPress={handleSubmit} />
-          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </KeyboardAvoidingView>
   );
 }
 

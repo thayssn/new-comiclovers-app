@@ -1,6 +1,7 @@
 import { CommonActions } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet } from "react-native";
+import TextButton from "../components/TextButton";
 import colors from "../config/colors";
 import spacing from "../config/spacing";
 import { createCollection } from "../services/collectionsService";
@@ -22,11 +23,13 @@ export default function CreateCollectionScreen({ navigation }) {
     <View style={styles.container}>
       <TextInput
         style={styles.textInput}
-        placeholder="Enter Collection Title"
+        placeholder="Digite o nome da nova coleção"
         value={title}
         onChangeText={setTitle}
       />
-      <Button title="Create Collection" onPress={handleCreateCollection} />
+      <View>
+        <TextButton onPress={handleCreateCollection} text="Criar" />
+      </View>
     </View>
   );
 }

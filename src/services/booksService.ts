@@ -57,6 +57,6 @@ export const useBookByISBN = (isbn: string) =>
   });
 
 export const useBooksSearch = (title: string) =>
-  useQuery(["books", "search"], () => fetchBooksByTitle(title), {
+  useQuery(["books", "search", title], () => fetchBooksByTitle(title), {
     enabled: false,
   });

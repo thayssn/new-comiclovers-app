@@ -9,54 +9,61 @@ import {
 } from "react-native";
 import spacing from "../config/spacing";
 import { getAllCollections } from "../services/collectionsService";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Collection from "../types/Collection";
 import { Icon } from "react-native-elements";
 import colors from "../config/colors";
+import ErrorState from "../components/ErrorState";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function CollectionsScreen({ navigation }) {
   const [collections, setCollections] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    const fetchCollections = async () => {
-      setIsLoading(true);
-      try {
-        const allCollections = await getAllCollections();
-        setCollections(allCollections);
-      } catch (err) {
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchCollections().then();
-  }, []);
-
-  if (isLoading) return <Loading />;
+  useFocusEffect(
+    useCallback(() => {
+      const fetchCollections = async () => {
+        setIsLoading(true);
+        try {
+          const allCollections = await getAllCollections();
+          setCollections(allCollections);
+        } catch (err) {
+          setIsError(true);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchCollections().then();
+    }, [])
+  );
 
   const onClickCollection = (collection: Collection) => {
     navigation.navigate("CollectionDetailScreen", { collection });
   };
 
-  navigation.setOptions({
-    headerRight: (props) => (
-      <Icon
-        {...props}
-        name="plus"
-        type="octicon"
-        color={colors.dark}
-        size={20}
-        containerStyle={{
-          paddingLeft: spacing.small,
-          marginRight: spacing.small,
-        }}
-        underlayColor="transparent"
-        onPress={() => navigation.navigate("CreateCollectionScreen")}
-      />
-    ),
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: (props) => (
+        <Icon
+          {...props}
+          name="plus"
+          type="octicon"
+          color={colors.dark}
+          size={20}
+          containerStyle={{
+            paddingLeft: spacing.small,
+            marginRight: spacing.small,
+          }}
+          underlayColor="transparent"
+          onPress={() => navigation.navigate("CreateCollectionScreen")}
+        />
+      ),
+    });
+  }, []);
+
+  if (isLoading) return <Loading />;
+  if (isError) return <ErrorState />;
 
   const renderCollectionItem = ({ item }) => {
     return (
@@ -64,7 +71,12 @@ export default function CollectionsScreen({ navigation }) {
         <TouchableWithoutFeedback onPress={() => onClickCollection(item)}>
           <View style={styles.collection}>
             <Text style={styles.collectionTitle}>{item.title}</Text>
-            <Icon name="chevron-right" type="entypo" size={24} />
+            <View style={styles.collectionAction}>
+              <Text
+                style={styles.collectionBooks}
+              >{`(${item.books?.length})`}</Text>
+              <Icon name="chevron-right" type="octicon" size={20} />
+            </View>
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -101,6 +113,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: spacing.small,
     marginBottom: spacing.tiny,
+  },
+  collectionAction: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  collectionBooks: {
+    fontSize: 16,
+    marginRight: spacing.medium,
   },
   titleInfo: {
     display: "flex",

@@ -39,7 +39,7 @@ export default function HomeScreen({ navigation }) {
           <TouchableWithoutFeedback onPress={() => onClickSection(section)}>
             <View style={styles.titleInfo}>
               <Text style={styles.sectionTitle}>{section.title}</Text>
-              <Icon name="chevron-right" type="entypo" size={20} />
+              <Icon name="chevron-right" type="octicon" size={20} />
             </View>
           </TouchableWithoutFeedback>
           <BooksList books={section.books} onClickBook={onClickBook} />

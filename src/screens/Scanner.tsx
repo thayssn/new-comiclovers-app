@@ -38,7 +38,6 @@ const CreateNewBookDialog = ({ onCancel, onAccept, visible, data }) => (
 export default function ScannerScreen({ navigation }) {
   const [scanned, setScanned] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
-  const [barcodeData, setBarcodeData] = useState(null);
   const [book, setBook] = useState(null);
   const [partialBook, setPartialBook] = useState(null);
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -52,20 +51,16 @@ export default function ScannerScreen({ navigation }) {
 
   const handleBarCodeScanned = async ({ data }) => {
     setScanned(true);
-    setBarcodeData(data);
     try {
       const book = await fetchBookByISBN(data);
       if (!book) {
         const partialBook = await fetchISBNInfo(data);
         setPartialBook(partialBook);
-        console.log(partialBook);
       } else {
         setBook(book);
       }
-
       openDialog();
     } catch (err) {
-      console.log(err);
       Alert.alert(
         "Código inválido",
         "Nenhum livro encontrado com este código.",
@@ -82,7 +77,6 @@ export default function ScannerScreen({ navigation }) {
   const handleScanAgain = () => {
     setScanned(false);
     setShowDialog(false);
-    setBarcodeData(null);
   };
 
   const handleGoToAnotherScreen = () => {

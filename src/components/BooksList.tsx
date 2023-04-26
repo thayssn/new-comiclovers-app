@@ -6,6 +6,7 @@ export default function BooksList({ books, onClickBook }) {
   return (
     <FlatList
       contentContainerStyle={styles.bookList}
+      showsHorizontalScrollIndicator={false}
       horizontal
       data={books}
       renderItem={({ item: book }) => (

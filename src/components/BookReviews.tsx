@@ -4,7 +4,7 @@ import colors from "../config/colors";
 import spacing from "../config/spacing";
 import { createBookReview } from "../services/booksService";
 import { BookReview } from "../types/Book";
-import TextButton from "./Button";
+import TextButton from "./TextButton";
 import ReviewModal from "./CreateReviewModal";
 import Review from "./Review";
 
