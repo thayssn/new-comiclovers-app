@@ -7,7 +7,7 @@ import BookThumbnail from "./BookThumbnail";
 export default function BooksGrid({
   books,
   isLoading,
-  onRefresh,
+  onRefresh = undefined,
   onClickBook,
 }) {
   return (
@@ -24,7 +24,10 @@ export default function BooksGrid({
         )}
         keyExtractor={(item, index) => index.toString()}
         refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={onRefresh ?? undefined}
+          />
         }
       />
     </View>

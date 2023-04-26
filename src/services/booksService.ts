@@ -1,5 +1,6 @@
 import { gqlClientRead, gqlClientWrite } from "../infra/gqlClient";
 import Book, { BookDetails, BookReview } from "../types/Book";
+import { api } from "../infra/isbnApi";
 import { useQuery } from "react-query";
 import {
   getBookByIdQuery,
@@ -22,6 +23,14 @@ export const fetchBookByISBN = async (isbn: string): Promise<BookDetails> => {
     getBookByISBNQuery(isbn)
   );
   return book;
+};
+
+export const fetchISBNInfo = async (
+  isbn: string
+): Promise<Partial<BookDetails>> => {
+  if (!isbn) return;
+  const { data } = await api.get<Partial<BookDetails>>(isbn);
+  return data;
 };
 
 const fetchBooksByTitle = async (title: string): Promise<Book[]> => {

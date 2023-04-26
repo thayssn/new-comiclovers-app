@@ -12,39 +12,75 @@ import SectionDetailScreen from "../screens/SectionDetail";
 import Section from "../types/Section";
 import BookSearchScreen from "../screens/BookSearch";
 import CollectionsScreen from "../screens/Collections";
+import CollectionDetailScreen from "../screens/CollectionDetail";
+import CreateCollectionScreen from "../screens/CreateCollection";
+import colors from "../config/colors";
+import spacing from "../config/spacing";
 
-type StackParamList = {
+type HomeStackParamList = {
   HomeScreen: undefined;
   BookSearchScreen: undefined;
   BookDetailScreen: { book: Book };
   SectionDetailScreen: { section: Section };
 };
 
-const StackNavigator = createNativeStackNavigator<StackParamList>();
+type CollectionsStackParamList = {
+  CollectionsScreen: undefined;
+  CreateCollectionScreen: undefined;
+  CollectionDetailScreen: { collection: Section };
+};
+
+const HomeStackNavigator = createNativeStackNavigator<HomeStackParamList>();
 function HomeNavigation() {
   return (
-    <StackNavigator.Navigator initialRouteName="HomeScreen" screenOptions={{}}>
-      <StackNavigator.Screen
+    <HomeStackNavigator.Navigator initialRouteName="HomeScreen">
+      <HomeStackNavigator.Screen
         name="HomeScreen"
         component={HomeScreen}
         options={{ title: "Home" }}
       />
-      <StackNavigator.Screen
+      <HomeStackNavigator.Screen
         name="BookDetailScreen"
         component={BookDetailScreen}
         options={({ route }) => ({ title: route.params.book.title })}
       />
-      <StackNavigator.Screen
+      <HomeStackNavigator.Screen
         name="SectionDetailScreen"
         component={SectionDetailScreen}
         options={({ route }) => ({ title: route.params.section.title })}
       />
-      <StackNavigator.Screen
+      <HomeStackNavigator.Screen
         name="BookSearchScreen"
         component={BookSearchScreen}
         options={{ title: "Busca" }}
       />
-    </StackNavigator.Navigator>
+    </HomeStackNavigator.Navigator>
+  );
+}
+
+const CollectionsStackNavigator =
+  createNativeStackNavigator<CollectionsStackParamList>();
+function CollectionsNavigation() {
+  return (
+    <CollectionsStackNavigator.Navigator initialRouteName="CollectionsScreen">
+      <CollectionsStackNavigator.Screen
+        name="CollectionsScreen"
+        component={CollectionsScreen}
+        options={{ title: "Todas" }}
+      />
+      <CollectionsStackNavigator.Screen
+        name="CreateCollectionScreen"
+        component={CreateCollectionScreen}
+        options={{ title: "Criar Coleção" }}
+      />
+      <CollectionsStackNavigator.Screen
+        name="CollectionDetailScreen"
+        component={CollectionDetailScreen}
+        options={({ route }) => ({
+          title: route.params.collection.title,
+        })}
+      />
+    </CollectionsStackNavigator.Navigator>
   );
 }
 
@@ -66,8 +102,8 @@ export default function TabsNavigation() {
         }}
       />
       <TabNavigator.Screen
-        name="CollectionsScreen"
-        component={CollectionsScreen}
+        name="CollectionsNavigation"
+        component={CollectionsNavigation}
         options={{
           title: "Minhas coleções",
           tabBarIcon: ({ color, size }) => (

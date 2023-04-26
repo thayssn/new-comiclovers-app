@@ -1,26 +1,11 @@
-import React, { useState, useSyncExternalStore } from "react";
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-  Alert,
-} from "react-native";
+import { View, Text, Image, ScrollView, StyleSheet } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
-import TextButton from "../components/Button";
-import ReviewModal from "../components/CreateReviewModal";
+import BookReviews from "../components/BookReviews";
 import ErrorState from "../components/ErrorState";
 import Loading from "../components/Loading";
-import Review from "../components/Review";
 import colors from "../config/colors";
 import spacing from "../config/spacing";
-import { createBookReview } from "../services/booksService";
-import { BookReview } from "../types/Book";
 import useBookDetails from "./useBookDetails";
-
-const { height: windowHeight } = Dimensions.get("window");
 
 const BookProp = ({ label, value }) => (
   <View style={styles.bookProps}>
@@ -29,32 +14,16 @@ const BookProp = ({ label, value }) => (
   </View>
 );
 
-const BookDetailScreen = ({ route }) => {
-  const [showRatingModal, setShowRatingModal] = useState(false);
+export default function BookDetailScreen({ route }) {
   const { book } = route.params;
   const { data, isLoading, isError, refetch, bookProps } = useBookDetails(book);
-  const [userReview, setUserReview] = useState<BookReview>(null);
-
-  const handleSubmitReview = async (review: BookReview) => {
-    try {
-      await createBookReview(book.id, review);
-      setUserReview(review);
-    } catch (err) {
-      console.log(err);
-      Alert.alert("Ocorreu um erro ao enviar sua avaliação!");
-    } finally {
-      setShowRatingModal(false);
-    }
-  };
 
   if (isLoading) return <Loading />;
   if (isError) return <ErrorState />;
   if (!data) return null;
 
   const { cover, description, title, writers, reviews } = data;
-  const hasUserReview = reviews.find(
-    ({ user_id }) => user_id === "fake-user-id"
-  );
+
   return (
     <ScrollView
       style={styles.container}
@@ -77,40 +46,10 @@ const BookDetailScreen = ({ route }) => {
           <BookProp key={index} {...prop} />
         ))}
       </View>
-      <View style={styles.reviewsContainer}>
-        <Text style={styles.reviewsTitle}>Avaliações</Text>
-        {reviews.length ? (
-          reviews?.map((review, index) => (
-            <Review review={review} key={index} />
-          ))
-        ) : (
-          <Text style={styles.emptyReviews}>Nenhuma avaliação</Text>
-        )}
-        {userReview && (
-          <>
-            <Text style={styles.warning}>
-              Seu comentário está sendo revisado! Logo ele será publicado.
-            </Text>
-            <Review review={userReview} ghost />
-          </>
-        )}
-        {!userReview && !hasUserReview && (
-          <TextButton
-            text="Avaliar"
-            onPress={() => {
-              setShowRatingModal(true);
-            }}
-          />
-        )}
-        <ReviewModal
-          onClose={() => setShowRatingModal(false)}
-          visible={showRatingModal}
-          onSubmit={handleSubmitReview}
-        />
-      </View>
+      <BookReviews reviews={reviews} book={book} />
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -173,30 +112,4 @@ const styles = StyleSheet.create({
     maxWidth: "50%",
     textAlign: "right",
   },
-  reviewsContainer: {
-    padding: 20,
-    marginVertical: 20,
-  },
-  emptyReviews: {
-    textAlign: "center",
-    marginBottom: spacing.large,
-  },
-  reviewsTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: spacing.large,
-  },
-  ratingButton: {
-    padding: spacing.medium,
-    color: colors.light,
-  },
-  warning: {
-    color: colors.lightDark,
-    textAlign: "center",
-    fontStyle: "italic",
-    fontSize: 14,
-    marginBottom: spacing.medium,
-  },
 });
-
-export default BookDetailScreen;

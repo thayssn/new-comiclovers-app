@@ -1,60 +1,102 @@
-import Book from "../types/Book";
-import BooksList from "../components/BooksList";
 import Loading from "../components/Loading";
-import { RefreshControl } from "react-native-gesture-handler";
 import { useSections } from "../services/sectionsService";
 import {
+  FlatList,
   StyleSheet,
   Text,
-  View,
-  ScrollView,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import Section from "../types/Section";
 import spacing from "../config/spacing";
+import { getAllCollections } from "../services/collectionsService";
+import { useEffect, useState } from "react";
+import Collection from "../types/Collection";
 import { Icon } from "react-native-elements";
-import ErrorState from "../components/ErrorState";
+import colors from "../config/colors";
 
 export default function CollectionsScreen({ navigation }) {
-  const { data, isLoading, refetch, isError } = useSections();
-  return <ErrorState />;
+  const [collections, setCollections] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const fetchCollections = async () => {
+      setIsLoading(true);
+      try {
+        const allCollections = await getAllCollections();
+        setCollections(allCollections);
+      } catch (err) {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCollections().then();
+  }, []);
+
   if (isLoading) return <Loading />;
-  if (isError) return <ErrorState />;
 
-  const onClickBook = (book: Book) =>
-    navigation.navigate("BookDetailScreen", { book });
+  const onClickCollection = (collection: Collection) => {
+    navigation.navigate("CollectionDetailScreen", { collection });
+  };
 
-  const onClickSection = (section: Section) => {
-    navigation.navigate("SectionDetailScreen", { section });
+  navigation.setOptions({
+    headerRight: (props) => (
+      <Icon
+        {...props}
+        name="plus"
+        type="octicon"
+        color={colors.dark}
+        size={20}
+        containerStyle={{
+          paddingLeft: spacing.small,
+          marginRight: spacing.small,
+        }}
+        underlayColor="transparent"
+        onPress={() => navigation.navigate("CreateCollectionScreen")}
+      />
+    ),
+  });
+
+  const renderCollectionItem = ({ item }) => {
+    return (
+      <View>
+        <TouchableWithoutFeedback onPress={() => onClickCollection(item)}>
+          <View style={styles.collection}>
+            <Text style={styles.collectionTitle}>{item.title}</Text>
+            <Icon name="chevron-right" type="entypo" size={24} />
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
+    );
   };
 
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={isLoading} onRefresh={refetch} />
-      }
-    >
-      {data.map((section) => (
-        <View style={styles.section} key={section.id}>
-          <TouchableWithoutFeedback onPress={() => onClickSection(section)}>
-            <View style={styles.titleInfo}>
-              <Text style={styles.sectionTitle}>{section.title}</Text>
-              <Icon name="chevron-right" type="entypo" size={20} />
-            </View>
-          </TouchableWithoutFeedback>
-          <BooksList books={section.books} onClickBook={onClickBook} />
-        </View>
-      ))}
-    </ScrollView>
+    <View style={styles.container}>
+      <FlatList
+        data={collections}
+        renderItem={renderCollectionItem}
+        keyExtractor={(item) => item.id}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  section: {
+  container: {
     flex: 1,
-    padding: spacing.small,
+    padding: spacing.medium,
   },
-  sectionTitle: {
+  collection: {
+    flex: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+    padding: spacing.small,
+    borderBottomWidth: 1,
+    borderColor: "rgba(0,0,0,.1)",
+  },
+  collectionTitle: {
     fontSize: 18,
     fontWeight: "bold",
     padding: spacing.small,
