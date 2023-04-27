@@ -31,6 +31,7 @@ type CollectionsStackParamList = {
     collectionId: string;
     booksInCollection: Book[];
   };
+  BookDetailScreen: { book: Book };
 };
 
 const HomeStackNavigator = createNativeStackNavigator<HomeStackParamList>();
@@ -94,6 +95,12 @@ function CollectionsNavigation() {
         name="AddBooksToCollectionScreen"
         component={BookSearchScreen}
         options={{ title: "Adicionar livros à coleção" }}
+      />
+
+      <CollectionsStackNavigator.Screen
+        name="BookDetailScreen"
+        component={BookDetailScreen}
+        options={({ route }) => ({ title: route.params.book.title })}
       />
     </CollectionsStackNavigator.Navigator>
   );
