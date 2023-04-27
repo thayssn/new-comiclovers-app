@@ -1,8 +1,9 @@
 import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import { Image, View } from "react-native";
 import { Icon } from "react-native-elements";
-import colors from "../config/colors";
-import spacing from "../config/spacing";
+import CLGradient from "../components/CLGradient";
+import colors from "../vars/colors";
+import spacing from "../vars/spacing";
 const logo = require("../../assets/logo-text.png");
 
 function LogoTitle() {
@@ -15,6 +16,7 @@ function LogoTitle() {
 }
 
 export default ({ navigation }): BottomTabNavigationOptions => ({
+  headerBackground: () => <CLGradient />,
   headerTitle: (props) => <LogoTitle />,
   tabBarShowLabel: false,
   tabBarActiveTintColor: colors.primary,

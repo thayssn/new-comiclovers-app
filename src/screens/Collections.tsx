@@ -7,12 +7,12 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import spacing from "../config/spacing";
+import spacing from "../vars/spacing";
 import { getAllCollections } from "../services/collectionsService";
 import { useCallback, useEffect, useState } from "react";
 import Collection from "../types/Collection";
 import { Icon } from "react-native-elements";
-import colors from "../config/colors";
+import colors from "../vars/colors";
 import ErrorState from "../components/ErrorState";
 import { useFocusEffect } from "@react-navigation/native";
 

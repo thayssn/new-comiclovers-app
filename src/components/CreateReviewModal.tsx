@@ -8,23 +8,28 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
-import spacing from "../config/spacing";
-import colors from "../config/colors";
+import spacing from "../vars/spacing";
+import colors from "../vars/colors";
 import TextButton from "./TextButton";
 import { BookReview } from "../types/Book";
+import sizes from "../vars/sizes";
+import Loading from "./Loading";
 
 export default function ReviewModal({ visible, onClose, onSubmit }) {
   const [rating, setRating] = useState(0);
   const [text, setText] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRatingPress = (value) => {
     setRating(value);
   };
 
   const handleClose = () => {
+    setIsLoading(false);
     setRating(0);
     setText("");
     setName("");
@@ -32,7 +37,7 @@ export default function ReviewModal({ visible, onClose, onSubmit }) {
     onClose();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (name === "") {
       setError("Nome obrigatório");
       return;
@@ -53,8 +58,8 @@ export default function ReviewModal({ visible, onClose, onSubmit }) {
       rating,
       published_at: new Date(Date.now()).toISOString(),
     };
-
-    onSubmit(review);
+    setIsLoading(true);
+    await onSubmit(review);
     handleClose();
   };
 
@@ -65,51 +70,56 @@ export default function ReviewModal({ visible, onClose, onSubmit }) {
     >
       <Modal visible={visible} transparent={true} onRequestClose={onClose}>
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Escreva uma avaliação</Text>
-            <View style={styles.ratingContainer}>
-              <View style={styles.ratingStarsContainer}>
-                {[1, 2, 3, 4, 5].map((value) => (
-                  <TouchableOpacity
-                    key={value}
-                    onPress={() => handleRatingPress(value)}
-                  >
-                    <Text
-                      style={[
-                        styles.ratingStar,
-                        value <= rating && styles.ratingStarFilled,
-                      ]}
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Escreva uma avaliação</Text>
+              <View style={styles.ratingContainer}>
+                <View style={styles.ratingStarsContainer}>
+                  {[1, 2, 3, 4, 5].map((value) => (
+                    <TouchableOpacity
+                      key={value}
+                      onPress={() => handleRatingPress(value)}
                     >
-                      &#9733;
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                      <Text
+                        style={[
+                          styles.ratingStar,
+                          value <= rating && styles.ratingStarFilled,
+                        ]}
+                      >
+                        &#9733;
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+              <TextInput
+                style={styles.input}
+                placeholder="Nome"
+                value={name}
+                onChangeText={setName}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Escreva um comentário"
+                multiline={true}
+                textAlignVertical="top"
+                numberOfLines={4}
+                value={text}
+                onChangeText={setText}
+              />
+              {error && <Text style={styles.error}>{error}</Text>}
+              <View style={styles.buttonGroup}>
+                <TextButton
+                  text="Cancelar"
+                  onPress={handleClose}
+                  style={{ backgroundColor: colors.lightDark }}
+                />
+                <TextButton text="Enviar" onPress={handleSubmit} />
               </View>
             </View>
-            <TextInput
-              style={styles.input}
-              placeholder="Nome"
-              multiline={true}
-              value={name}
-              onChangeText={setName}
-            />
-            <TextInput
-              style={styles.textInput}
-              placeholder="Escreva um comentário"
-              multiline={true}
-              value={text}
-              onChangeText={setText}
-            />
-            {error && <Text style={styles.error}>{error}</Text>}
-            <View style={styles.buttonGroup}>
-              <TextButton
-                text="Cancelar"
-                onPress={handleClose}
-                style={{ backgroundColor: colors.lightDark }}
-              />
-              <TextButton text="Enviar" onPress={handleSubmit} />
-            </View>
-          </View>
+          )}
         </View>
       </Modal>
     </KeyboardAvoidingView>
@@ -130,9 +140,10 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   modalTitle: {
-    fontSize: 24,
+    textAlign: "center",
+    fontSize: sizes.large,
     fontWeight: "bold",
-    marginBottom: spacing.small,
+    marginBottom: spacing.medium,
   },
   ratingContainer: {
     alignItems: "center",
@@ -140,14 +151,14 @@ const styles = StyleSheet.create({
     marginBottom: spacing.medium,
   },
   ratingLabel: {
-    fontSize: 16,
+    fontSize: sizes.large,
     marginRight: spacing.small,
   },
   ratingStarsContainer: {
     flexDirection: "row",
   },
   ratingStar: {
-    fontSize: 40,
+    fontSize: sizes.gigantic,
     color: colors.lightDark,
     marginRight: 4,
   },
@@ -155,12 +166,8 @@ const styles = StyleSheet.create({
     color: colors.golden,
   },
   input: {
-    padding: 8,
-  },
-  textInput: {
-    padding: 8,
-    marginBottom: 16,
-    height: 100,
+    padding: spacing.small,
+    marginBottom: spacing.small,
   },
   buttonGroup: {
     display: "flex",

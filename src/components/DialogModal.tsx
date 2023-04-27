@@ -1,5 +1,7 @@
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import colors from "../config/colors";
+import colors from "../vars/colors";
+import sizes from "../vars/sizes";
+import spacing from "../vars/spacing";
 
 const DialogModal = ({
   visible,
@@ -48,32 +50,32 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     backgroundColor: colors.light,
-    borderRadius: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    borderRadius: spacing.tiny,
+    paddingHorizontal: spacing.medium,
+    paddingVertical: spacing.small,
     minWidth: "80%",
     maxWidth: "90%",
   },
   title: {
-    fontSize: 18,
+    fontSize: sizes.large,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: spacing.small,
     textAlign: "center",
   },
   description: {
-    fontSize: 16,
-    marginBottom: 20,
+    fontSize: sizes.medium,
+    marginBottom: spacing.large,
     textAlign: "center",
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 20,
+    gap: spacing.medium,
   },
   button: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    paddingVertical: spacing.small,
+    paddingHorizontal: spacing.medium,
+    borderRadius: spacing.tiny,
   },
   cancelButton: {
     backgroundColor: colors.lightDark,

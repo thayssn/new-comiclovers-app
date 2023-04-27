@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList } from "react-native";
-import spacing from "../config/spacing";
+import spacing from "../vars/spacing";
 import BookThumbnail from "./BookThumbnail";
 
 export default function BooksList({ books, onClickBook }) {

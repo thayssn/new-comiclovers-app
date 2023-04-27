@@ -8,12 +8,13 @@ import {
   getCollectionDetails,
 } from "../services/collectionsService";
 import { StyleSheet, Text, View } from "react-native";
-import colors from "../config/colors";
-import spacing from "../config/spacing";
+import colors from "../vars/colors";
+import spacing from "../vars/spacing";
 import { Icon } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
 import TextButton from "../components/TextButton";
 import { sortBooksByTitleAndEdition } from "../utils/sortBooksByTitleAndEdition";
+import sizes from "../vars/sizes";
 
 export default function CollectionDetailScreen({ navigation, route }) {
   const { id } = route.params.collection;
@@ -82,7 +83,7 @@ export default function CollectionDetailScreen({ navigation, route }) {
           isLoading={isLoading}
         />
       )}
-      <View>
+      <View style={styles.buttonWrapper}>
         <TextButton
           text="Adicionar mais livros"
           onPress={() =>
@@ -100,10 +101,13 @@ export default function CollectionDetailScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   emptyStateTitle: {
-    fontSize: 16,
+    fontSize: sizes.medium,
     margin: spacing.medium,
     color: colors.mediumDark,
     fontStyle: "italic",
     textAlign: "center",
+  },
+  buttonWrapper: {
+    padding: spacing.small,
   },
 });

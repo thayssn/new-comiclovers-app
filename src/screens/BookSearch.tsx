@@ -6,7 +6,7 @@ import { useBooksSearch } from "../services/booksService";
 import { useRef, useState } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import spacing from "../config/spacing";
+import spacing from "../vars/spacing";
 import { Keyboard } from "react-native";
 import EmptyState from "../components/EmptyState";
 import TextButton from "../components/TextButton";

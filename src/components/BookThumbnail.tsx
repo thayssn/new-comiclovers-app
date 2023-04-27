@@ -7,9 +7,10 @@ import {
   StyleSheet,
 } from "react-native";
 import { Icon } from "react-native-elements";
-import colors from "../config/colors";
-import spacing from "../config/spacing";
+import colors from "../vars/colors";
+import spacing from "../vars/spacing";
 import Book from "../types/Book";
+import sizes from "../vars/sizes";
 
 export default function BookThumbnail({ book, onClickBook }) {
   const { cover, title, edition }: Book = book;
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     borderRadius: spacing.tiny,
   },
   book_item_title: {
-    fontSize: 14,
+    fontSize: sizes.small,
     marginTop: spacing.small,
     textAlign: "center",
   },

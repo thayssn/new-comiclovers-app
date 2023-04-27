@@ -1,4 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
+import spacing from "../vars/spacing";
 
 export default function CLGradient() {
   return (
@@ -11,6 +12,8 @@ export default function CLGradient() {
         left: 0,
         right: 0,
         top: 0,
+        borderRadius: spacing.tiny,
+        // width: "100%",
         height: "100%",
       }}
     />

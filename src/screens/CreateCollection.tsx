@@ -2,8 +2,8 @@ import { CommonActions } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet } from "react-native";
 import TextButton from "../components/TextButton";
-import colors from "../config/colors";
-import spacing from "../config/spacing";
+import colors from "../vars/colors";
+import spacing from "../vars/spacing";
 import { createCollection } from "../services/collectionsService";
 
 export default function CreateCollectionScreen({ navigation }) {

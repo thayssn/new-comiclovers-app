@@ -1,31 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
 import Lottie from "lottie-react-native";
-import colors, { ColorKeys } from "../config/colors";
+import colors, { ColorKeys } from "../vars/colors";
 import emptyAnimationJson from "../../assets/empty.json";
+import sizes from "../vars/sizes";
 
 type ErrorStateParams = {
   backgroundColor?: ColorKeys;
 };
-export default function EmptyState({
-  backgroundColor = "transparent",
-}: ErrorStateParams) {
+export default function EmptyState() {
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: colors[backgroundColor],
-        },
-      ]}
-    >
-      <Text
-        style={{
-          fontSize: 32,
-          fontWeight: "bold",
-        }}
-      >
-        Oops!
-      </Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>Oops!</Text>
       <Text>Não encontramos nada por aqui!</Text>
       <Lottie
         source={emptyAnimationJson}
@@ -48,5 +33,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     height: "100%",
+  },
+  text: {
+    fontSize: sizes.huge,
+    fontWeight: "bold",
+    backgroundColor: "transparent",
   },
 });

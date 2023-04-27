@@ -11,7 +11,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import Section from "../types/Section";
-import spacing from "../config/spacing";
+import spacing from "../vars/spacing";
 import { Icon } from "react-native-elements";
 import ErrorState from "../components/ErrorState";
 
@@ -52,7 +52,6 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   section: {
     flex: 1,
-    padding: spacing.small,
   },
   sectionTitle: {
     fontSize: 18,

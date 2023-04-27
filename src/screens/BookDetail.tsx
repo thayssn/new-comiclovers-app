@@ -12,8 +12,8 @@ import BookReviews from "../components/BookReviews";
 import ErrorState from "../components/ErrorState";
 import Loading from "../components/Loading";
 import TextButton from "../components/TextButton";
-import colors from "../config/colors";
-import spacing from "../config/spacing";
+import colors from "../vars/colors";
+import spacing from "../vars/spacing";
 import { addBookToCollection } from "../services/collectionsService";
 import useBookDetails from "./useBookDetails";
 

@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
-import colors from "../config/colors";
-import spacing from "../config/spacing";
+import colors from "../vars/colors";
+import spacing from "../vars/spacing";
 import { createBookReview } from "../services/booksService";
 import { BookReview } from "../types/Book";
 import TextButton from "./TextButton";
 import ReviewModal from "./CreateReviewModal";
 import Review from "./Review";
+import sizes from "../vars/sizes";
 
 export default function BookReviews({ reviews, book }) {
-  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
   const [userReview, setUserReview] = useState<BookReview>(null);
   const hasUserReview = reviews.find(
     ({ user_id }) => user_id === "fake-user-id"
@@ -19,12 +20,12 @@ export default function BookReviews({ reviews, book }) {
       await createBookReview(book.id, review);
       setUserReview(review);
     } catch (err) {
-      console.log(err);
       Alert.alert("Ocorreu um erro ao enviar sua avaliação!");
     } finally {
-      setShowRatingModal(false);
+      setShowReviewModal(false);
     }
   };
+
   return (
     <View style={styles.reviewsContainer}>
       <Text style={styles.reviewsTitle}>Avaliações</Text>
@@ -45,13 +46,13 @@ export default function BookReviews({ reviews, book }) {
         <TextButton
           text="Avaliar"
           onPress={() => {
-            setShowRatingModal(true);
+            setShowReviewModal(true);
           }}
         />
       )}
       <ReviewModal
-        onClose={() => setShowRatingModal(false)}
-        visible={showRatingModal}
+        onClose={() => setShowReviewModal(false)}
+        visible={showReviewModal}
         onSubmit={handleSubmitReview}
       />
     </View>
@@ -60,15 +61,15 @@ export default function BookReviews({ reviews, book }) {
 
 const styles = StyleSheet.create({
   reviewsContainer: {
-    padding: 20,
-    marginVertical: 20,
+    padding: spacing.large,
+    marginVertical: spacing.large,
   },
   emptyReviews: {
     textAlign: "center",
     marginBottom: spacing.large,
   },
   reviewsTitle: {
-    fontSize: 24,
+    fontSize: sizes.huge,
     fontWeight: "bold",
     marginBottom: spacing.large,
   },
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     color: colors.lightDark,
     textAlign: "center",
     fontStyle: "italic",
-    fontSize: 14,
+    fontSize: sizes.medium,
     marginBottom: spacing.medium,
   },
 });

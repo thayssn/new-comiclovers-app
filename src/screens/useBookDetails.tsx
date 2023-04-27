@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 import { Rating } from "react-native-elements";
-import colors from "../config/colors";
-import spacing from "../config/spacing";
+import colors from "../vars/colors";
+import spacing from "../vars/spacing";
 import { useBookById } from "../services/booksService";
 import { capitalizeFirstLetter } from "../utils/typography";
 

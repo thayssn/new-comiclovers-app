@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet } from "react-native";
 import { Rating } from "react-native-ratings";
-import colors from "../config/colors";
-import spacing from "../config/spacing";
+import colors from "../vars/colors";
+import spacing from "../vars/spacing";
 import { BookReview } from "../types/Book";
+import sizes from "../vars/sizes";
 
 export default function Review({
   review,
@@ -47,20 +48,20 @@ const styles = StyleSheet.create({
   },
   userName: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: sizes.medium,
     fontWeight: "bold",
-    marginBottom: 5,
+    marginBottom: spacing.small,
     color: colors.dark,
   },
   text: {
     textAlign: "center",
-    fontSize: 14,
+    fontSize: sizes.small,
     marginBottom: spacing.medium,
     color: colors.dark,
   },
   date: {
     textAlign: "center",
-    fontSize: 12,
+    fontSize: sizes.small,
     marginBottom: spacing.small,
     color: colors.dark,
   },
@@ -68,6 +69,6 @@ const styles = StyleSheet.create({
     marginBottom: spacing.small,
   },
   ghost: {
-    opacity: 0.4,
+    opacity: 0.3,
   },
 });
